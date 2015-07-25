@@ -80,7 +80,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Hongkong'
 
 USE_I18N = True
 
@@ -94,10 +94,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = "/home/ubuntu/GestureTrainer.com/GestureTrainer/static/"
 
 
 # used to store images of profiles
-MEDIA_ROOT='/Users/ahau/GesturesTrainer/media/'
-# MEDIA_ROOT='/home/ubuntu/healthiecare.com/healthiecare-api/media/'
+# MEDIA_ROOT='/Users/ahau/GesturesTrainer/media/'
+MEDIA_ROOT='/home/ubuntu/GestureTrainer.com/GestureTrainer/media/'
 MEDIA_URL='/media/'
 
