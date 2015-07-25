@@ -94,11 +94,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = "/home/ubuntu/GestureTrainer.com/GestureTrainer/static/"
+STATIC_ROOT = "/home/ubuntu/GestureTrainer.com/GesturesTrainer/static/"
 
 
 # used to store images of profiles
 # MEDIA_ROOT='/Users/ahau/GesturesTrainer/media/'
-MEDIA_ROOT='/home/ubuntu/GestureTrainer.com/GestureTrainer/media/'
+MEDIA_ROOT='/home/ubuntu/GestureTrainer.com/GesturesTrainer/media/'
 MEDIA_URL='/media/'
 
