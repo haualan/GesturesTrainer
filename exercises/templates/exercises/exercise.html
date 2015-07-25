@@ -1,0 +1,1198 @@
+{% extends 'exercises/layout.html' %}
+
+{% block customScripts %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://content.jwplatform.com/libraries/IUkQRbu5.js"></script>
+
+
+{% endblock customScripts %}
+
+{% block custombody_content %}
+
+<div class="container">
+<div class="page-header">
+  <h1>Welcome {{ user.username }}</h1>
+</div>
+
+<div class="row">
+  <div class="col-sm-2"></div>
+  <div class="col-sm-8">
+
+<p>video and buttons should go here</p>
+
+<p>phase: {{phase}}</p>
+<p>section: {{section}}</p>
+<p>watched_instruction_already: {{watched_instruction_already}}</p>
+<p>generateInstruction: {{generateInstruction}}</p>
+<p>generateQuestion: {{generateQuestion}}</p>
+<p>request: {{request}}</p>
+
+
+
+<form method="post" action="{% url 'exercises:exercise' %}">
+  {% csrf_token %}
+
+{% ifequal watched_instruction_already False %}
+  <p>Watch some instructions now!</p>
+
+  <div id="myPlayer"></div>
+  <script type="text/javascript">
+    var thePlayer = jwplayer("myPlayer").setup({
+          playlist: [
+                       {
+                          file:"{{generateInstruction.greetingVideo}}", 
+                          image:"{{robothead_small_image}}",
+                        },
+                       {
+                          file:"{{generateInstruction.doYouUnderstandVideo}}",
+                          image:"{{robothead_small_image}}",
+                        },
+            ],
+            width: "100%",
+        aspectratio: "595:576",
+        stretching: "exactfit",
+        autostart: true,
+        events:{ 
+            onTime: function(event) { 
+          
+            },
+            onPlaylistComplete:function(){
+              
+            }
+          }
+        }); 
+      //stop player manual controls
+        thePlayer.setControls(false);
+  </script>
+
+
+
+    <button type="submit" class="btn btn-primary" name="understandBtn" value="1"> I understand </button>
+
+    <button type="submit" class="btn btn-primary" name="dontUnderstandBtn" value="1"> I don't understand </button>
+
+
+
+{% else %}
+
+<!-- need some video tag here -->
+
+  <p>You watched instructions already, proceed to questions</p>
+
+
+  {% if phase == "phase1"%}
+    {% if section == "pretest"%}
+<!--       <p>phase1 pretest yea</p> -->
+
+        <div id="myPlayer"></div>
+        <script type="text/javascript">
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                             {
+                                file:"{{generateQuestion.instructionPreGestureVideo}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.instructionPostGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.choiceAVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.choiceBVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.choiceCVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.MakeAChoiceVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) { 
+                    if(this.getPlaylistIndex() == 6){
+                      if (event.position >= 12 && notResponded) { 
+                        $("#choiceABtn, #choiceBBtn, #choiceCBtn").removeClass("disabled");
+                      }
+                    }
+                
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    console.log("enable buttons");
+                    $("#choiceABtn, #choiceBBtn, #choiceCBtn").addClass("disabled");
+                    $("#nextBtn").removeClass("disabled");
+
+                    if (notResponded){
+                      var postdata={
+                      'choice': 'timedOut',
+                      'target':"{{generateQuestion.targetGesture}}",
+                      'phase': "{{phase}}",
+                      'section': "{{section}}",
+                      }
+                      $.post('{% url 'exercises:userResponse' %}',postdata);
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    console.log(index["index"]);
+                    if (index["index"] == 3){
+                      console.log("display A");
+                      $("#choiceABtn").html("A. {{generateQuestion.choiceA}}");
+                    }  else if (index["index"] == 4) {
+                      console.log("display B");
+                      $("#choiceBBtn").html("B. {{generateQuestion.choiceB}}");
+                    }  else if (index["index"] == 5) {
+                      console.log("display C");
+                      $("#choiceCBtn").html("C. {{generateQuestion.choiceC}}");
+                    }
+
+
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+          $("#choiceABtn, #choiceBBtn, #choiceCBtn").click(function(){
+            console.log("some button was clicked.");
+            notResponded = false;
+            var postdata={
+              'choice': $(this).val(),
+              'target':"{{generateQuestion.targetGesture}}",
+              'phase': "{{phase}}",
+              'section': "{{section}}",
+            }
+            $.post('{% url 'exercises:userResponse' %}',postdata);
+            $("#choiceABtn, #choiceBBtn, #choiceCBtn").addClass('disabled');
+            $("#nextBtn").removeClass("disabled");
+            thePlayer.load([{
+                                file:"{{generateQuestion.FeedbackThanks}}",
+                                image:"{{robothead_small_image}}",
+                              }
+                            ]);
+
+
+
+          });
+        });
+        </script>
+
+      <div class="row">
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="choiceABtn" name="choiceABtn" value="{{generateQuestion.choiceA}}"> A </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="choiceBBtn" name="choiceBBtn" value="{{generateQuestion.choiceB}}"> B </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="choiceCBtn" name="choiceCBtn" value="{{generateQuestion.choiceC}}"> C </button>
+          </div>
+
+      </div>
+      
+    {% endif %}
+
+    {% if section == "training"%}
+      <div id="myPlayer"></div>
+      <script type="text/javascript">
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) {                 
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    console.log("enable buttons");
+                    $("#nextBtn").removeClass("disabled");
+
+                    if (notResponded){
+                      var postdata={
+                      'choice': 'noResponseRequired',
+                      'target':"{{generateQuestion.targetGesture}}",
+                      'phase': "{{phase}}",
+                      'section': "{{section}}",
+                      }
+                      $.post('{% url 'exercises:userResponse' %}',postdata)
+                        .done(function( json ) {
+                          $.getJSON('{% url 'exercises:userResponse' %}', postdata)
+                            .done(function( json ) {
+                              console.log( "JSON Data endCurrentSection?: " + json.response );
+                              if (json.response){
+                                $("#nextBtn").addClass("disabled hidden");
+                                $("#dashBtn").removeClass("disabled hidden");
+                              }
+                            })
+                            .fail(function( jqxhr, textStatus, error ) {
+                                var err = textStatus + ", " + error;
+                                console.log( "Request Failed: " + err );
+                            });
+
+
+                          });
+
+                      
+
+
+                     
+                      
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    if (index["index"] == 0){
+                      $("#trainingBtn").html("{{generateQuestion.targetGesture}}")
+
+                    };
+                  
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+
+        });
+        </script>
+
+      <div class="row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+              <button type="submit" class="btn btn-block btn-primary disabled" id="trainingBtn" name="trainingBtn" value="0">...</button>
+          </div>
+          <div class="col-sm-4"></div>
+      </div>
+
+
+    {% endif %}
+
+    {% if section == "posttest1" or section == "posttest2" or section == "posttest3" %}
+      <!-- <p>phase1 posttest yea</p> -->
+      <div id="myPlayer"></div>
+        <script type="text/javascript">
+          var loopCounter = 0;
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                             {
+                                file:"{{generateQuestion.instructionPreGestureVideo}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.instructionPostGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.choiceAVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.choiceBVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.choiceCVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.MakeAChoiceVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) { 
+                    if(this.getPlaylistIndex() == 6){
+                      if (event.position >= 12 && notResponded) { 
+                        $("#choiceABtn, #choiceBBtn, #choiceCBtn, #dunnoBtn").removeClass("disabled");
+                      }
+                    }
+                
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    if (loopCounter == 1 || notResponded == false){
+                      $("#choiceABtn, #choiceBBtn, #choiceCBtn, #dunnoBtn").addClass("disabled");
+                      $("#nextBtn").removeClass("disabled");
+
+                      if (notResponded){
+                        var postdata={
+                        'choice': 'timedOut',
+                        'target':"{{generateQuestion.targetGesture}}",
+                        'phase': "{{phase}}",
+                        'section': "{{section}}",
+                        }
+                        $.post('{% url 'exercises:userResponse' %}',postdata);
+                      }
+                    }
+                    else
+                    {
+                      loopCounter ++;
+                      thePlayer.playlistItem(0);
+                    }
+                    
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    console.log(index["index"]);
+                    if (index["index"] == 3){
+                      console.log("display A");
+                      $("#choiceABtn").html("A. {{generateQuestion.choiceA}}");
+                    }  else if (index["index"] == 4) {
+                      console.log("display B");
+                      $("#choiceBBtn").html("B. {{generateQuestion.choiceB}}");
+                    }  else if (index["index"] == 5) {
+                      console.log("display C");
+                      $("#choiceCBtn").html("C. {{generateQuestion.choiceC}}");
+                    }
+
+
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+          $("#choiceABtn, #choiceBBtn, #choiceCBtn, #dunnoBtn").click(function(){
+            console.log("some button was clicked.");
+            notResponded = false;
+            var postdata={
+              'choice': $(this).val(),
+              'target':"{{generateQuestion.targetGesture}}",
+              'phase': "{{phase}}",
+              'section': "{{section}}",
+            }
+            $.post('{% url 'exercises:userResponse' %}',postdata);
+            $("#choiceABtn, #choiceBBtn, #choiceCBtn, #dunnoBtn").addClass('disabled');
+            $("#nextBtn").removeClass("disabled");
+
+            if ($(this).val() == "{{generateQuestion.targetGesture}}" ){
+                thePlayer.load([{
+                                  file:"{{generateQuestion.FeedbackCorrect}}",
+                                  image:"{{robothead_small_image}}",
+                                }
+                              ]);
+            } else {
+                thePlayer.load([{
+                                  file:"{{generateQuestion.FeedbackWrong}}",
+                                  image:"{{robothead_small_image}}",
+                                }
+                              ]);
+            }
+            
+
+
+
+          });
+        });
+        </script>
+
+
+
+
+
+      <div class="row">
+
+          <div class="col-sm-3">
+              <button type="button" class="btn btn-block btn-primary disabled" id="choiceABtn" name="choiceABtn" value="{{generateQuestion.choiceA}}"> A </button>
+          </div>
+          <div class="col-sm-3">
+              <button type="button" class="btn btn-block btn-primary disabled" id="choiceBBtn" name="choiceBBtn" value="{{generateQuestion.choiceB}}"> B </button>
+          </div>
+          <div class="col-sm-3">
+              <button type="button" class="btn btn-block btn-primary disabled" id="choiceCBtn" name="choiceCBtn" value="{{generateQuestion.choiceC}}"> C </button>
+          </div>
+          <div class="col-sm-3">
+              <button type="button" class="btn btn-block btn-primary disabled" id="dunnoBtn" name="dunnoBtn" value="dontKnow"> Don't Know </button>
+          </div>
+
+      </div>
+
+    {% endif %}
+  {% endif %}
+
+  {% if phase == "phase2"%}
+    {% if section == "pretest"%}
+
+        <div id="myPlayer"></div>
+        <script type="text/javascript">
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                             {
+                                file:"{{generateQuestion.instructionPreGestureVideo}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                            
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) { 
+                    if(this.getPlaylistIndex() == 1){
+                      if (event.position >= 24 && notResponded) { 
+                        $("#correctBtn, #incorrectBtn").removeClass("disabled");
+                      }
+                    }
+                
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    console.log("enable buttons");
+                    $("#correctBtn, #incorrectBtn").addClass("disabled");
+                    $("#nextBtn").removeClass("disabled");
+
+                    if (notResponded){
+                      var postdata={
+                      'choice': 'timedOut',
+                      'target':"{{generateQuestion.targetGesture}}",
+                      'phase': "{{phase}}",
+                      'section': "{{section}}",
+                      }
+                      $.post('{% url 'exercises:userResponse' %}',postdata);
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    console.log(index["index"]);
+                    if (index["index"] ==  1 ){
+                      console.log("display gesture");
+                      $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                    } 
+
+
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+          $("#correctBtn, #incorrectBtn").click(function(){
+            console.log("some button was clicked.");
+            notResponded = false;
+            var postdata={
+              'choice': $(this).val(),
+              'target':"{{generateQuestion.targetGesture}}",
+              'phase': "{{phase}}",
+              'section': "{{section}}",
+            }
+            $.post('{% url 'exercises:userResponse' %}',postdata);
+            $("#correctBtn, #incorrectBtn").addClass('disabled');
+            $("#nextBtn").removeClass("disabled");
+            thePlayer.load([{
+                                file:"{{generateQuestion.FeedbackThanks}}",
+                                image:"{{robothead_small_image}}",
+                              }
+                            ]);
+
+
+
+          });
+        });
+        </script>
+
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-block btn-primary disabled" id="instructionDisplayBtn" name="instructionDisplayBtn" value=""> ... </button>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+      <div class="row">
+
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="correctBtn" name="correctBtn" value="correct"> Correct </button>
+          </div>
+          <div class="col-sm-4">
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="incorrectBtn" name="incorrectBtn" value="incorrect"> Incorrect </button>
+          </div>
+
+      </div>
+
+
+    {% endif %}
+
+    {% if section == "training"%}
+
+      <div id="myPlayer"></div>
+      <script type="text/javascript">
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                             {
+                                file:"{{generateQuestion.targetGestureVideo1}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.targetGestureVideo2}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) {      
+                    if(this.getPlaylistIndex() == 0){
+                      if(event.position >= 12){
+                        $("#trainingBtn").html("{{generateQuestion.targetGesture}}");
+                      }
+                      
+                    };           
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    console.log("enable buttons");
+                    $("#nextBtn").removeClass("disabled");
+
+                    if (notResponded){
+                      var postdata={
+                      'choice': 'noResponseRequired',
+                      'target':"{{generateQuestion.targetGesture}}",
+                      'phase': "{{phase}}",
+                      'section': "{{section}}",
+                      }
+                      $.post('{% url 'exercises:userResponse' %}',postdata);
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                  
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+
+        });
+        </script>
+
+
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-block btn-primary disabled" id="trainingBtn" name="trainingBtn" value=""> ... </button>
+        </div>
+      </div>
+
+    {% endif %}
+
+    {% if section == "posttest1" or section == "posttest2" or section == "posttest3" %}
+
+        <div id="myPlayer"></div>
+        <script type="text/javascript">
+          var loopCounter = 0
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                             {
+                                file:"{{generateQuestion.instructionPreGestureVideo}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                            
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) { 
+                    if(this.getPlaylistIndex() == 1){
+                      if (event.position >= 24 && notResponded) { 
+                        $("#correctBtn, #incorrectBtn, #dunnoBtn").removeClass("disabled");
+                      }
+                    }
+                
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    if (loopCounter == 1 || notResponded == false){
+                      console.log("disable buttons");
+                      $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass("disabled");
+                      $("#nextBtn").removeClass("disabled");
+
+                      if (notResponded){
+                        
+                        var postdata={
+                        'choice': 'timedOut',
+                        'target':"{{generateQuestion.targetGesture}}",
+                        'phase': "{{phase}}",
+                        'section': "{{section}}",
+                        }
+                        $.post('{% url 'exercises:userResponse' %}',postdata);
+                      }
+
+                    } else {
+                      loopCounter ++;
+                      thePlayer.playlistItem(0);
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    console.log(index["index"]);
+                    if (index["index"] ==  1 ){
+                      console.log("display gesture");
+                      $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                    } 
+
+
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+          $("#correctBtn, #incorrectBtn, #dunnoBtn").click(function(){
+            console.log("some button was clicked.");
+            notResponded = false;
+            var postdata={
+              'choice': $(this).val(),
+              'target':"{{generateQuestion.targetGesture}}",
+              'phase': "{{phase}}",
+              'section': "{{section}}",
+            }
+            $.post('{% url 'exercises:userResponse' %}',postdata);
+            $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass('disabled');
+            $("#nextBtn").removeClass("disabled");
+
+            if ($(this).val() == "correct" ){
+                thePlayer.load([{
+                                  file:"{{generateQuestion.FeedbackCorrect}}",
+                                  image:"{{robothead_small_image}}",
+                                }
+                              ]);
+            } else {
+                thePlayer.load([{
+                                  file:"{{generateQuestion.FeedbackWrong}}",
+                                  image:"{{robothead_small_image}}",
+                                }
+                              ]);
+            }
+
+
+
+          });
+        });
+        </script>
+
+
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-block btn-primary disabled" id="instructionDisplayBtn" name="instructionDisplayBtn" value=""> ... </button>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+      <br>
+      <div class="row">
+
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="correctBtn" name="correctBtn" value="correct"> Correct </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="incorrectBtn" name="incorrectBtn" value="incorrect"> Incorrect </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="dunnoBtn" name="dunnoBtn" value="dunno"> Don't Know </button>
+          </div>
+
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if phase == "phase3"%}
+    {% if section == "pretest"%}
+
+        <div id="myPlayer"></div>
+        <script type="text/javascript">
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                            
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                            
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) { 
+                    if(this.getPlaylistIndex() == 0){
+                      if (event.position >= 6 && notResponded) { 
+                        $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                      }
+                      if (event.position >= 24 && notResponded) { 
+                        $("#correctBtn, #incorrectBtn").removeClass("disabled");
+                      }
+                    }
+                
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    console.log("enable buttons");
+                    $("#correctBtn, #incorrectBtn").addClass("disabled");
+                    $("#nextBtn").removeClass("disabled");
+
+                    if (notResponded){
+                      var postdata={
+                      'choice': 'timedOut',
+                      'target':"{{generateQuestion.targetGesture}}",
+                      'phase': "{{phase}}",
+                      'section': "{{section}}",
+                      }
+                      $.post('{% url 'exercises:userResponse' %}',postdata);
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    console.log(index["index"]);
+                    if (index["index"] ==  1 ){
+                      console.log("display gesture");
+                      $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                    } 
+
+
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+          $("#correctBtn, #incorrectBtn").click(function(){
+            console.log("some button was clicked.");
+            notResponded = false;
+            var postdata={
+              'choice': $(this).val(),
+              'target':"{{generateQuestion.targetGesture}}",
+              'phase': "{{phase}}",
+              'section': "{{section}}",
+            }
+            $.post('{% url 'exercises:userResponse' %}',postdata);
+            $("#correctBtn, #incorrectBtn").addClass('disabled');
+            $("#nextBtn").removeClass("disabled");
+            thePlayer.load([{
+                                file:"{{generateQuestion.FeedbackThanks}}",
+                                image:"{{robothead_small_image}}",
+                              }
+                            ]);
+
+
+
+          });
+        });
+        </script>
+
+
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-block btn-primary disabled" id="instructionDisplayBtn" name="instructionDisplayBtn" value=""> ... </button>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+      <br>
+      <div class="row">
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="correctBtn" name="correctBtn" value="correct"> Correct </button>
+          </div>
+          <div class="col-sm-4">
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="incorrectBtn" name="incorrectBtn" value="incorrect"> Incorrect </button>
+          </div>
+
+      </div>
+    {% endif %}
+
+    {% if section == "training"%}
+
+      <div id="myPlayer"></div>
+      <script type="text/javascript">
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                             {
+                                file:"{{generateQuestion.targetGestureVideo1}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.targetGestureVideo2}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) {      
+                    if(this.getPlaylistIndex() == 0){
+                      if(event.position >= 12){
+                        $("#trainingBtn").html("{{generateQuestion.targetGesture}}");
+                      }
+                      
+                    };           
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    console.log("enable buttons");
+                    $("#nextBtn").removeClass("disabled");
+
+                    if (notResponded){
+                      var postdata={
+                      'choice': 'noResponseRequired',
+                      'target':"{{generateQuestion.targetGesture}}",
+                      'phase': "{{phase}}",
+                      'section': "{{section}}",
+                      }
+                      $.post('{% url 'exercises:userResponse' %}',postdata);
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                  
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+
+        });
+        </script>
+
+
+
+
+
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-block btn-primary disabled" id="trainingBtn" name="trainingBtn" value=""> ... </button>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if section == "posttest1" or section == "posttest2" or section == "posttest3" %}
+
+        <div id="myPlayer"></div>
+        <script type="text/javascript">
+          var loopCounter = 0;
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                            
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                            
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) { 
+                    if(this.getPlaylistIndex() == 0){
+                      if (event.position >= 6 && notResponded) { 
+                        $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                      }
+                      if (event.position >= 24 && notResponded) { 
+                        $("#correctBtn, #incorrectBtn, #dunnoBtn").removeClass("disabled");
+                      }
+                    }
+                
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    if (loopCounter == 1 || notResponded == false){
+                      console.log("enable buttons");
+                      $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass("disabled");
+                      $("#nextBtn").removeClass("disabled");
+
+                      if (notResponded){
+                        var postdata={
+                        'choice': 'timedOut',
+                        'target':"{{generateQuestion.targetGesture}}",
+                        'phase': "{{phase}}",
+                        'section': "{{section}}",
+                        }
+                        $.post('{% url 'exercises:userResponse' %}',postdata);
+                      }
+                    } else {
+                      loopCounter ++;
+                      thePlayer.playlistItem(0);
+
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    console.log(index["index"]);
+                    if (index["index"] ==  1 ){
+                      console.log("display gesture");
+                      $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                    } 
+
+
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+          $("#correctBtn, #incorrectBtn, #dunnoBtn").click(function(){
+            console.log("some button was clicked.");
+            notResponded = false;
+            var postdata={
+              'choice': $(this).val(),
+              'target':"{{generateQuestion.targetGesture}}",
+              'phase': "{{phase}}",
+              'section': "{{section}}",
+            }
+            $.post('{% url 'exercises:userResponse' %}',postdata);
+            $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass('disabled');
+            $("#nextBtn").removeClass("disabled");
+
+            if ($(this).val() == "correct" ){
+                thePlayer.load([{
+                                  file:"{{generateQuestion.FeedbackCorrect}}",
+                                  image:"{{robothead_small_image}}",
+                                }
+                              ]);
+            } else {
+                thePlayer.load([{
+                                  file:"{{generateQuestion.FeedbackWrong}}",
+                                  image:"{{robothead_small_image}}",
+                                }
+                              ]);
+            }
+
+
+
+          });
+        });
+        </script>
+
+
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-block btn-primary disabled" id="instructionDisplayBtn" name="instructionDisplayBtn" value=""> ... </button>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+      <br>
+      <div class="row">
+
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="correctBtn" name="correctBtn" value="correct"> Correct </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="incorrectBtn" name="incorrectBtn" value="incorrect"> Incorrect </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="dunnoBtn" name="dunnoBtn" value="dontKnow"> Don't Know </button>
+          </div>
+
+      </div>
+    {% endif %}
+  {% endif %}
+
+  <br/>
+  <div class="row text-center">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <button type="submit" class="btn btn-block btn-primary disabled" id="nextBtn" name="nextBtn" value="1"> Next </button>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+
+
+
+{% endifequal %}
+  </form>
+
+  <br/>
+
+  <form method="get" action="{% url 'exercises:dashboard' %}">
+  {% csrf_token %}
+    <div class="row text-center">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <button type="submit" class="btn btn-block btn-primary hidden" id="dashBtn" name="dashBtn" value="1"> Section is complete </button>
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+  </form>
+  
+
+
+
+
+
+  </div>
+  <div class="col-sm-2"></div>
+</div>
+
+
+</div>
+{% endblock custombody_content %}
