@@ -118,8 +118,8 @@ MEDIA_URL='/media/'
 remoteHost = True
 if remoteHost:
     
-    STATIC_ROOT = "/home/ubuntu/GestureTrainer.com/GesturesTrainer/static/"
-    MEDIA_ROOT='/home/ubuntu/GestureTrainer.com/GesturesTrainer/media/'
+    STATIC_ROOT = "/home/ubuntu/GesturesTrainer.com/GesturesTrainer/static/"
+    MEDIA_ROOT='/home/ubuntu/GesturesTrainer.com/GesturesTrainer/media/'
 else:
 
     # used to store images of profiles
