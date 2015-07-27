@@ -111,13 +111,20 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
 STATIC_URL = '/static/'
-# STATIC_ROOT = "/home/ubuntu/GestureTrainer.com/GesturesTrainer/static/"
-
-
-# used to store images of profiles
-MEDIA_ROOT='/Users/ahau/GesturesTrainer/media/'
-# MEDIA_ROOT='/home/ubuntu/GestureTrainer.com/GesturesTrainer/media/'
 MEDIA_URL='/media/'
+
+# change to True if pushing to production
+remoteHost = True
+if remoteHost:
+    
+    STATIC_ROOT = "/home/ubuntu/GestureTrainer.com/GesturesTrainer/static/"
+    MEDIA_ROOT='/home/ubuntu/GestureTrainer.com/GesturesTrainer/media/'
+else:
+
+    # used to store images of profiles
+    MEDIA_ROOT='/Users/ahau/GesturesTrainer/media/'
+
+    
+
 
