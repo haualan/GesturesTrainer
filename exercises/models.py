@@ -113,7 +113,6 @@ class ExerciseResult(models.Model):
   gestureTested = models.CharField(max_length = 100)
   response = models.CharField(max_length = 100, choices = response_choices )
 
-# https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase1/assessment/Phase+I+assessment_gesture+instruction+1.mp4
 
 # p1_assessment_prefix = '/media/phase1/assessment/'
 # p1_feedback_prefix = '/media/phase1/feedback/'
@@ -139,6 +138,30 @@ p3_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingm
 p3_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/feedback/'
 p3_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/training/'
 
+# phase 3 had video issues where the scenarios are not uniform in length so the buttons don't light up correctly. 
+# Each video must now have its own cutoff time
+P3_VIDEO_CUTOFF = {
+  'angry' : ( 20  , 21  , 22  , 22  ) ,
+  'awesome' : ( 22  , 23  , 23  , 23  ) ,
+  'drive' : ( 20  , 20  , 21  , 22  ) ,
+  'eat' : ( 19  , 20  , 19  , 20  ) ,
+  'bird'  : ( 20  , 20  , 20  , 20  ) ,
+  'good'  : ( 23  , 24  , 21  , 23  ) ,
+  'hello' : ( 23  , 23  , 23  , 22  ) ,
+  'hug' : ( 21  , 21  , 21  , 20  ) ,
+  'hungry'  : ( 20  , 20  , 21  , 20  ) ,
+  'mine'  : ( 19  , 19  , 19  , 19  ) ,
+  'notAllowed'  : ( 20  , 20  , 19  , 19  ) ,
+  'yes' : ( 23  , 23  , 22  , 22  ) ,
+  'annoyed' : ( 22  , 21  , 22  , 22  ) ,
+  'baby'  : ( 20  , 19  , 20  , 19  ) ,
+  'come'  : ( 19  , 19  , 19  , 19  ) ,
+  'wait'  : ( 22  , 20  , 20  , 21  ) ,
+  'walk'  : ( 19  , 20  , 19  , 19  ) ,
+  'welcome' : ( 19  , 20  , 19  , 20  ) ,
+  'where' : ( 19  , 20  , 20  , 20  ) ,
+  'wrong' : ( 20  , 22  , 20  , 21  ) ,
+}
 
 VIDEOS = {      
   # video played at beginning of the assessment / pretest / posttest, general greetings and instructions
@@ -207,7 +230,7 @@ VIDEOS = {
   'p1_assessment_makeAChoiceNow':   '{}Phase I assessment_gesture instruction 4.mp4'.format(p1_assessment_prefix),
 
   # Thank you video for any repsonse chosen during pretest, this is a short thankyou Response
-  'p1_feedback_thankyou':   '{}Phase I assessment_gesture feedback_thank you.mp4'.format(p1_feedback_prefix),
+  'p1_feedback_thankyou':   '{}Phase I assessment_gesture feedback_thank youv2.mp4'.format(p1_feedback_prefix),
 
   # This is a longer response given when user makes a correct choice given during posttest
   'p1_feedback_correct':    '{}Phase I assessment_gesture feedback_correct.mp4'.format(p1_feedback_prefix),
@@ -297,7 +320,7 @@ VIDEOS = {
   'p2_assessment_wrongGesture':  '{}Phase II assessment_gesture instruction 2_wrong4 錯嘅.mp4'.format(p2_assessment_prefix),
 
   # Thank you video for any repsonse chosen during pretest, this is a short thankyou Response
-  'p2_feedback_thankyou':   '{}Phase II assessment_gesture feedback_thank you (pretest).mp4'.format(p2_feedback_prefix),
+  'p2_feedback_thankyou':   '{}Phase II assessment_gesture feedback_thank you (pretest)v2.mp4'.format(p2_feedback_prefix),
 
   # greeting and instructions for the training section
   'p2_training_greetingAndInstruction': '{}Phase II training_greeting and instruction.mp4'.format(p2_training_prefix),
@@ -469,7 +492,7 @@ VIDEOS = {
 
 
   # Thank you video for any repsonse chosen during pretest, this is a short thankyou Response
-  'p3_feedback_thankyou':   '{}Phase III training _ assessment_gesture feedback_thank you (pretest).mp4'.format(p3_feedback_prefix),
+  'p3_feedback_thankyou':   '{}Phase III training _ assessment_gesture feedback_thank you (pretest)v2.mp4'.format(p3_feedback_prefix),
 
   # greeting and instructions for the training section
   'p3_training_greetingAndInstruction': '{}Phase III training_greeting and instruction.mp4'.format(p3_training_prefix),

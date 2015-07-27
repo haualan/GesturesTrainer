@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'djfrontend',
     'djfrontend.skeleton',
     'import_export',
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -53,6 +54,24 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 )
+
+# social oauth methods
+AUTHENTICATION_BACKENDS = (
+    # 'social.backends.open_id.OpenIdAuth',
+    # 'social.backends.google.GoogleOpenId',
+    # 'social.backends.google.GoogleOAuth2',
+    # 'social.backends.google.GoogleOAuth',
+    # 'social.backends.twitter.TwitterOAuth',
+    # 'social.backends.yahoo.YahooOpenId',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
+    'django.contrib.auth.context_processors.auth',
+)
+
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
@@ -94,11 +113,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = "/home/ubuntu/GestureTrainer.com/GesturesTrainer/static/"
+# STATIC_ROOT = "/home/ubuntu/GestureTrainer.com/GesturesTrainer/static/"
 
 
 # used to store images of profiles
-# MEDIA_ROOT='/Users/ahau/GesturesTrainer/media/'
-MEDIA_ROOT='/home/ubuntu/GestureTrainer.com/GesturesTrainer/media/'
+MEDIA_ROOT='/Users/ahau/GesturesTrainer/media/'
+# MEDIA_ROOT='/home/ubuntu/GestureTrainer.com/GesturesTrainer/media/'
 MEDIA_URL='/media/'
 

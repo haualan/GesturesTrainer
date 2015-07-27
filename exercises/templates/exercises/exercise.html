@@ -11,15 +11,16 @@
 {% block custombody_content %}
 
 <div class="container">
-<div class="page-header">
-  <h1>Welcome {{ user.username }}</h1>
-</div>
+<br>
 
 <div class="row">
   <div class="col-sm-2"></div>
   <div class="col-sm-8">
 
+{% if debug %}
+
 <p>video and buttons should go here</p>
+
 
 <p>phase: {{phase}}</p>
 <p>section: {{section}}</p>
@@ -28,13 +29,14 @@
 <p>generateQuestion: {{generateQuestion}}</p>
 <p>request: {{request}}</p>
 
+{% endif %}
+
 
 
 <form method="post" action="{% url 'exercises:exercise' %}">
   {% csrf_token %}
 
 {% ifequal watched_instruction_already False %}
-  <p>Watch some instructions now!</p>
 
   <div id="myPlayer"></div>
   <script type="text/javascript">
@@ -58,7 +60,7 @@
           
             },
             onPlaylistComplete:function(){
-              
+              $('#understandBtn, #dontUnderstandBtn').removeClass('disabled');
             }
           }
         }); 
@@ -66,24 +68,35 @@
         thePlayer.setControls(false);
   </script>
 
+<!-- <div class="row">
+  <div class="col-sm-6">
+    <button type="submit" class="btn btn-primary btn-block disabled" id="understandBtn" name="understandBtn" value="1"> I understand </button>
+  </div>
+  <div class="col-sm-6">
+    <button type="submit" class="btn btn-primary btn-block disabled" id="dontUnderstandBtn" name="dontUnderstandBtn" value="1"> I don't understand </button>
+  </div>
+</div> -->
 
+<div class="row">
+  <div class="col-sm-6">
+    <button type="submit" class="btn btn-primary btn-block" id="understandBtn" name="understandBtn" value="1"> I understand </button>
+  </div>
+  <div class="col-sm-6">
+    <button type="submit" class="btn btn-primary btn-block" id="dontUnderstandBtn" name="dontUnderstandBtn" value="1"> I don't understand </button>
+  </div>
+</div>
 
-    <button type="submit" class="btn btn-primary" name="understandBtn" value="1"> I understand </button>
+    
 
-    <button type="submit" class="btn btn-primary" name="dontUnderstandBtn" value="1"> I don't understand </button>
 
 
 
 {% else %}
 
-<!-- need some video tag here -->
-
-  <p>You watched instructions already, proceed to questions</p>
-
 
   {% if phase == "phase1"%}
     {% if section == "pretest"%}
-<!--       <p>phase1 pretest yea</p> -->
+
 
         <div id="myPlayer"></div>
         <script type="text/javascript">
@@ -642,7 +655,30 @@
                       'phase': "{{phase}}",
                       'section': "{{section}}",
                       }
-                      $.post('{% url 'exercises:userResponse' %}',postdata);
+                      $.post('{% url 'exercises:userResponse' %}',postdata)
+                        .done(function( json ) {
+                          $.getJSON('{% url 'exercises:userResponse' %}', postdata)
+                            .done(function( json ) {
+                              console.log( "JSON Data endCurrentSection?: " + json.response );
+                              if (json.response){
+                                $("#nextBtn").addClass("disabled hidden");
+                                $("#dashBtn").removeClass("disabled hidden");
+                              }
+                            })
+                            .fail(function( jqxhr, textStatus, error ) {
+                                var err = textStatus + ", " + error;
+                                console.log( "Request Failed: " + err );
+                            });
+
+
+                          });
+
+                      
+
+
+                     
+                      
+                      }
                     }
                     
                     
@@ -844,7 +880,7 @@
                       if (event.position >= 6 && notResponded) { 
                         $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
                       }
-                      if (event.position >= 24 && notResponded) { 
+                      if (event.position >= {{generateQuestion.videoCutoff}} && notResponded) { 
                         $("#correctBtn, #incorrectBtn").removeClass("disabled");
                       }
                     }
@@ -980,7 +1016,30 @@
                       'phase': "{{phase}}",
                       'section': "{{section}}",
                       }
-                      $.post('{% url 'exercises:userResponse' %}',postdata);
+                      $.post('{% url 'exercises:userResponse' %}',postdata)
+                        .done(function( json ) {
+                          $.getJSON('{% url 'exercises:userResponse' %}', postdata)
+                            .done(function( json ) {
+                              console.log( "JSON Data endCurrentSection?: " + json.response );
+                              if (json.response){
+                                $("#nextBtn").addClass("disabled hidden");
+                                $("#dashBtn").removeClass("disabled hidden");
+                              }
+                            })
+                            .fail(function( jqxhr, textStatus, error ) {
+                                var err = textStatus + ", " + error;
+                                console.log( "Request Failed: " + err );
+                            });
+
+
+                          });
+
+                      
+
+
+                     
+                      
+                      }
                     }
                     
                     
@@ -1045,7 +1104,7 @@
                       if (event.position >= 6 && notResponded) { 
                         $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
                       }
-                      if (event.position >= 24 && notResponded) { 
+                      if (event.position >= {{generateQuestion.videoCutoff}} && notResponded) { 
                         $("#correctBtn, #incorrectBtn, #dunnoBtn").removeClass("disabled");
                       }
                     }

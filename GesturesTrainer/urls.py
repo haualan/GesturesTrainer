@@ -11,3 +11,6 @@ urlpatterns = [
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# social oauth
+urlpatterns.append(url('', include('social.apps.django_app.urls', namespace='social')))

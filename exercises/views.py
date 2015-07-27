@@ -1,4 +1,4 @@
-from exercises.models import Snippet, ExerciseResult, Phase, Section, PhaseSection, QUESTIONS, VIDEOS
+from exercises.models import Snippet, ExerciseResult, Phase, Section, PhaseSection, QUESTIONS, VIDEOS, P3_VIDEO_CUTOFF
 from exercises.serializers import SnippetSerializer, UserSerializer
 from rest_framework import generics, permissions
 
@@ -106,11 +106,15 @@ class DashboardView(GroupRequiredMixin, generic.View):
     a = Exercise(user = request.user)
 
     sectionsAvailable =  a.sectionsAvailable()
+    response = {"all_sections": sectionsAvailable}
+    
+    if request.user.groups.filter(name='debug').exists():
+            response['debug'] = True
 
 
 
     return render(request,'exercises/dashboard.html', 
-        {"all_sections": sectionsAvailable} 
+         response
       )
 
 class UserResponseView(GroupRequiredMixin, generic.View):
@@ -157,14 +161,19 @@ class ExerciseView(GroupRequiredMixin, generic.View):
         a = Exercise(user = request.user)
 
         print 'dashbtn:', request.POST.get('dashbtn', False)
-        phase_section = ast.literal_eval(request.POST.get('dashbtn', 'False'))
-        if phase_section:
-            self.request.session['dashbtn'] = phase_section
-        else:
-            phase_section = self.request.session['dashbtn'] 
 
-        phase = phase_section['phase']
-        section = phase_section['section']
+        phase_section = request.POST.get('dashbtn', False)
+        if phase_section:
+            phase_section = phase_section.split(',')
+            phase = phase_section[0]
+            section = phase_section[1]
+            self.request.session['dashbtn'] = {'phase':phase, 'section': section}
+        else:
+            # phase_section = ast.literal_eval(request.POST.get('dashbtn', 'False'))
+            phase_section = self.request.session['dashbtn'] 
+            phase = phase_section['phase']
+            section = phase_section['section']
+
 
         # if user clicked understandBtn, user understands the instruction video, update cookies and proceed to questions
         if request.POST.get('understandBtn', False) == '1':
@@ -197,7 +206,8 @@ class ExerciseView(GroupRequiredMixin, generic.View):
         response['section'] = section
         response['robothead_small_image'] = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/robothead_small.png'
 
-        
+        if request.user.groups.filter(name='debug').exists():
+            response['debug'] = True
 
         return render(request,'exercises/exercise.html', 
         response
@@ -262,7 +272,7 @@ class Exercise(object):
                 result['user_progress'] = user_progress[i][j]
 
                 phaseSection_start_date = PhaseSection.objects.filter(phase = i, section = j).values_list('start_date')[0][0]
-
+                result['phaseSection_start_date'] = phaseSection_start_date
                 
                 # is today greater than section startdate?
                 if today_date > phaseSection_start_date:
@@ -277,7 +287,8 @@ class Exercise(object):
 
                         elif user_progress[i][j] >=40 and user_progress[i][j] < 80:
                             # has it been one week after start_date
-                            if today_date > phaseSection_start_date + timedelta(weeks = 1):
+                            secondCycleCompleteDateTime = ExerciseResult.objects.filter(phase = i, section = j).values_list('created').order_by('created')[40-1][0]
+                            if (today_date > phaseSection_start_date + timedelta(weeks = 1)) and (today_date > secondCycleCompleteDateTime + timedelta(weeks = 1)):
                                 # is previous section complete?
                                 if previous_section_complete:
                                     result['is_enabled'] = True
@@ -320,7 +331,10 @@ class Exercise(object):
                         'section': j, 
                         'name': i + '_' +j, 
                         'user_progress': user_progress[i][j], 
-                        'is_enabled': True })
+                        'is_enabled': True,
+                        'phaseSection_start_date': phaseSection_start_date
+                        }
+                        )
 
         return results
 
@@ -473,6 +487,7 @@ class Exercise(object):
                     'FeedbackThanks': VIDEOS['p1_feedback_thankyou'],
 
 
+
                 }
 
                 # return questionSet
@@ -589,6 +604,9 @@ class Exercise(object):
 
                     'FeedbackThanks': VIDEOS['p3_feedback_thankyou'],
 
+                    # phase 3 pretest special delay sequence
+                    'videoCutoff': P3_VIDEO_CUTOFF[unanswered][0],
+
 
                 }
 
@@ -618,6 +636,9 @@ class Exercise(object):
 
                     'FeedbackCorrect': VIDEOS['p3_feedback_correct'],
                     'FeedbackWrong': VIDEOS['p3_feedback_{}Incorrect'.format(unanswered)],
+
+                    # phase 3 posttest special delay sequence
+                    'videoCutoff': P3_VIDEO_CUTOFF[unanswered][int(section[-1])],
 
 
                 }
