@@ -234,6 +234,7 @@
 
 
 
+
           });
         });
         </script>
@@ -465,7 +466,7 @@
             }
             $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
             $("#choiceABtn, #choiceBBtn, #choiceCBtn, #dunnoBtn").addClass('disabled');
-            $("#nextBtn").removeClass("disabled");
+            
 
             if ($(this).val() == "{{generateQuestion.targetGesture}}" ){
                 thePlayer.load([{
@@ -597,7 +598,7 @@
             }
             $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
             $("#correctBtn, #incorrectBtn").addClass('disabled');
-            $("#nextBtn").removeClass("disabled");
+            
             thePlayer.load([{
                                 file:"{{generateQuestion.FeedbackThanks}}",
                                 image:"{{robothead_small_image}}",
@@ -827,7 +828,7 @@
             }
             $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
             $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass('disabled');
-            $("#nextBtn").removeClass("disabled");
+            
 
             if ($(this).val() == "correct" ){
                 thePlayer.load([{
@@ -959,7 +960,7 @@
             }
             $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
             $("#correctBtn, #incorrectBtn").addClass('disabled');
-            $("#nextBtn").removeClass("disabled");
+            
             thePlayer.load([{
                                 file:"{{generateQuestion.FeedbackThanks}}",
                                 image:"{{robothead_small_image}}",
@@ -1189,7 +1190,7 @@
             }
             $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
             $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass('disabled');
-            $("#nextBtn").removeClass("disabled");
+            
 
             if ($(this).val() == "correct" ){
                 thePlayer.load([{
