@@ -647,6 +647,10 @@ class Exercise(object):
 
 
             questionSet['progress_percent'] = progress_percent
+            if progress_percent >= 1:
+                questionSet['finishedSection'] = True
+            else:
+                questionSet['finishedSection'] = False
             return questionSet
 
 
