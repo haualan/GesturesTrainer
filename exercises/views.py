@@ -381,6 +381,8 @@ class Exercise(object):
     def endCurrentSection(self, phase, section):
         count = self.userProgress(phase, section)
 
+        print 'endCurrentSection count:', count
+
         if count == 0:
             return False
         if count % 20 == 0:
