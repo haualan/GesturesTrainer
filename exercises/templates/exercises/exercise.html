@@ -110,7 +110,7 @@
 
 
 
-{% elif generateQuestion == None or generateQuestion.progress_percent < 1 %}
+{% elif generateQuestion != True or generateQuestion.progress_percent < 1 %}
 
 
   {% if phase == "phase1"%}
