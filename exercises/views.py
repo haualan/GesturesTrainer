@@ -177,7 +177,9 @@ class ExerciseView(GroupRequiredMixin, generic.View):
         response['request'] = self.request.session.keys()
         response['phase'] = phase
         response['section'] = section
-        response['robothead_small_image'] = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/robothead_small.png'
+        # response['robothead_small_image'] = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/robothead_small.png'
+        response['robothead_small_image'] = ''
+
 
         if request.user.groups.filter(name='debug').exists():
             response['debug'] = True
