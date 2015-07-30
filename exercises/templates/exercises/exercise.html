@@ -87,14 +87,10 @@
         thePlayer.setControls(false);
   </script>
 
-<!-- <div class="row">
-  <div class="col-sm-6">
-    <button type="submit" class="btn btn-primary btn-block disabled" id="understandBtn" name="understandBtn" value="1"> I understand </button>
-  </div>
-  <div class="col-sm-6">
-    <button type="submit" class="btn btn-primary btn-block disabled" id="dontUnderstandBtn" name="dontUnderstandBtn" value="1"> I don't understand </button>
-  </div>
-</div> -->
+
+
+
+{% if debug %}
 
 <div class="row">
   <div class="col-sm-6">
@@ -104,6 +100,19 @@
     <button type="submit" class="btn btn-primary btn-block" id="dontUnderstandBtn" name="dontUnderstandBtn" value="1"> I don't understand </button>
   </div>
 </div>
+
+{% else %}
+
+<div class="row">
+  <div class="col-sm-6">
+    <button type="submit" class="btn btn-primary btn-block disabled" id="understandBtn" name="understandBtn" value="1"> I understand </button>
+  </div>
+  <div class="col-sm-6">
+    <button type="submit" class="btn btn-primary btn-block disabled" id="dontUnderstandBtn" name="dontUnderstandBtn" value="1"> I don't understand </button>
+  </div>
+</div>
+
+{% endif %}
 
     
 
@@ -169,7 +178,7 @@
                     // user timed out, disable choices, timedOut
                     console.log("enable buttons");
                     $("#choiceABtn, #choiceBBtn, #choiceCBtn").addClass("disabled");
-                    $("#nextBtn").removeClass("disabled");
+                    
 
                     if (notResponded){
                       var postdata={
@@ -178,7 +187,14 @@
                       'phase': "{{phase}}",
                       'section': "{{section}}",
                       }
-                      $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
+                      $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                        function(){
+                          checkProgress(postdata);
+                          $("#nextBtn").removeClass("disabled");
+                        }
+                      );
+                    } else {
+                      $("#nextBtn").removeClass("disabled");
                     }
                     
                     
@@ -276,7 +292,6 @@
                   onPlaylistComplete:function(){
                     // user timed out, disable choices, timedOut
                     console.log("enable buttons");
-                    $("#nextBtn").removeClass("disabled");
 
                     if (notResponded){
                       var postdata={
@@ -293,6 +308,8 @@
                               if (json.response){
                                 $("#nextBtn").addClass("disabled hidden");
                                 $("#dashBtn").removeClass("disabled hidden");
+                              } else {
+                                $("#nextBtn").removeClass("disabled");
                               }
                             })
                             .fail(function( jqxhr, textStatus, error ) {
@@ -320,7 +337,8 @@
                   
                   }
                 }
-              }); 
+              });
+             
             //stop player manual controls
               thePlayer.setControls(false);
 
@@ -404,7 +422,7 @@
                     // user timed out, disable choices, timedOut
                     if (loopCounter == 1 || notResponded == false){
                       $("#choiceABtn, #choiceBBtn, #choiceCBtn, #dunnoBtn").addClass("disabled");
-                      $("#nextBtn").removeClass("disabled");
+                      
 
                       if (notResponded){
                         var postdata={
@@ -413,7 +431,19 @@
                         'phase': "{{phase}}",
                         'section': "{{section}}",
                         }
-                        $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
+                        $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                            function(){
+                              checkProgress(postdata);
+                              $("#nextBtn").removeClass("disabled");
+
+                            }
+
+                        
+
+
+                          );
+                      } else {
+                        $("#nextBtn").removeClass("disabled");
                       }
                     }
                     else
@@ -539,7 +569,7 @@
               events:{ 
                   onTime: function(event) { 
                     if(this.getPlaylistIndex() == 1){
-                      if (event.position >= 24 && notResponded) { 
+                      if (event.position >= 12 && notResponded) { 
                         $("#correctBtn, #incorrectBtn").removeClass("disabled");
                       }
                     }
@@ -549,7 +579,7 @@
                     // user timed out, disable choices, timedOut
                     console.log("enable buttons");
                     $("#correctBtn, #incorrectBtn").addClass("disabled");
-                    $("#nextBtn").removeClass("disabled");
+                    
 
                     if (notResponded){
                       var postdata={
@@ -558,8 +588,15 @@
                       'phase': "{{phase}}",
                       'section': "{{section}}",
                       }
-                      $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
-                    }
+                      $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                        function(){
+                          checkProgress(postdata);
+                          $("#nextBtn").removeClass("disabled");
+                        }
+                      );
+                    } else {
+                      $("#nextBtn").removeClass("disabled");
+                    } 
                     
                     
                   },
@@ -667,7 +704,7 @@
                   onPlaylistComplete:function(){
                     // user timed out, disable choices, timedOut
                     console.log("enable buttons");
-                    $("#nextBtn").removeClass("disabled");
+                    
 
                     if (notResponded){
                       var postdata={
@@ -675,7 +712,9 @@
                       'target':"{{generateQuestion.targetGesture}}",
                       'phase': "{{phase}}",
                       'section': "{{section}}",
-                      }
+                      };
+
+
                       $.post('{% url 'exercises:userResponse' %}',postdata)
                         .done(function( json ) {
                           $.getJSON('{% url 'exercises:userResponse' %}', postdata)
@@ -684,6 +723,8 @@
                               if (json.response){
                                 $("#nextBtn").addClass("disabled hidden");
                                 $("#dashBtn").removeClass("disabled hidden");
+                              } else {
+                                $("#nextBtn").removeClass("disabled");
                               }
                             })
                             .fail(function( jqxhr, textStatus, error ) {
@@ -693,13 +734,8 @@
 
 
                           });
+                    
 
-                      
-
-
-                     
-                      
-                      }
                     }
                     
                     
@@ -707,8 +743,9 @@
                   onPlaylistItem:function(index, playlist){
                   
                   }
-                }
-              }); 
+              }
+        });
+        
             //stop player manual controls
               thePlayer.setControls(false);
 
@@ -762,7 +799,7 @@
               events:{ 
                   onTime: function(event) { 
                     if(this.getPlaylistIndex() == 1){
-                      if (event.position >= 24 && notResponded) { 
+                      if (event.position >= 12 && notResponded) { 
                         $("#correctBtn, #incorrectBtn, #dunnoBtn").removeClass("disabled");
                       }
                     }
@@ -773,7 +810,6 @@
                     if (loopCounter == 1 || notResponded == false){
                       console.log("disable buttons");
                       $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass("disabled");
-                      $("#nextBtn").removeClass("disabled");
 
                       if (notResponded){
                         
@@ -783,7 +819,13 @@
                         'phase': "{{phase}}",
                         'section': "{{section}}",
                         }
-                        $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
+                        $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                          function(){
+                            checkProgress(postdata)
+                            $("#nextBtn").removeClass("disabled");
+                          });
+                      } else {
+                        $("#nextBtn").removeClass("disabled");
                       }
 
                     } else {
@@ -868,7 +910,7 @@
               <button type="button" class="btn btn-block btn-primary disabled" id="incorrectBtn" name="incorrectBtn" value="incorrect"> Incorrect </button>
           </div>
           <div class="col-sm-4">
-              <button type="button" class="btn btn-block btn-primary disabled" id="dunnoBtn" name="dunnoBtn" value="dunno"> Don't Know </button>
+              <button type="button" class="btn btn-block btn-primary disabled" id="dunnoBtn" name="dunnoBtn" value="dontKnow"> Don't Know </button>
           </div>
 
       </div>
@@ -920,7 +962,14 @@
                       'phase': "{{phase}}",
                       'section': "{{section}}",
                       }
-                      $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
+                      $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                        function(){
+                          checkProgress(postdata);
+                          $("#nextBtn").removeClass("disabled");
+                        });
+                        
+                    } else {
+                      $("#nextBtn").removeClass("disabled");
                     }
                     
                     
@@ -1028,7 +1077,6 @@
                   onPlaylistComplete:function(){
                     // user timed out, disable choices, timedOut
                     console.log("enable buttons");
-                    $("#nextBtn").removeClass("disabled");
 
                     if (notResponded){
                       var postdata={
@@ -1045,7 +1093,10 @@
                               if (json.response){
                                 $("#nextBtn").addClass("disabled hidden");
                                 $("#dashBtn").removeClass("disabled hidden");
+                              } else {
+                                $("#nextBtn").removeClass("disabled");
                               }
+
                             })
                             .fail(function( jqxhr, textStatus, error ) {
                                 var err = textStatus + ", " + error;
@@ -1068,8 +1119,8 @@
                   onPlaylistItem:function(index, playlist){
                   
                   }
-                }
-              }); 
+        });
+          
             //stop player manual controls
               thePlayer.setControls(false);
 
@@ -1145,7 +1196,13 @@
                         'phase': "{{phase}}",
                         'section': "{{section}}",
                         }
-                        $.post('{% url 'exercises:userResponse' %}',postdata).done(checkProgress(postdata));
+                        $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                          function(){
+                            checkProgress(postdata);
+                            $("#nextBtn").removeClass("disabled");
+                          });
+                      } else {
+                        $("#nextBtn").removeClass("disabled");
                       }
                     } else {
                       loopCounter ++;

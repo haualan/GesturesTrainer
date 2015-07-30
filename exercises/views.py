@@ -1,5 +1,4 @@
-from exercises.models import Snippet, ExerciseResult, Phase, Section, PhaseSection, QUESTIONS, VIDEOS, P3_VIDEO_CUTOFF
-from exercises.serializers import SnippetSerializer, UserSerializer
+from exercises.models import ExerciseResult, Phase, Section, PhaseSection, QUESTIONS, VIDEOS, P3_VIDEO_CUTOFF
 from rest_framework import generics, permissions
 
 from django.contrib.auth.models import User
@@ -21,42 +20,6 @@ import json, ast
 from datetime import date, timedelta, datetime
 from django.utils import timezone
 
-
-class SnippetViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-
-    Additionally we also provide an extra `highlight` action.
-    """
-    queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
-
-    @detail_route(renderer_classes=[renderers.StaticHTMLRenderer])
-    def highlight(self, request, *args, **kwargs):
-        snippet = self.get_object()
-        return Response(snippet.highlighted)
-
-    def perform_create(self, serializer):
-            serializer.save(owner=self.request.user)
-
-
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    This viewset automatically provides `list` and `detail` actions.
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-@api_view(('GET',))
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'snippets': reverse('snippet-list', request=request, format=format)
-    })
 
 
 def logged_in_and_in_group(user):
@@ -126,6 +89,16 @@ class UserResponseView(GroupRequiredMixin, generic.View):
 
         # print 'response posted......', request.POST.get('phase'), request.POST.get('section'), request.POST.get('target'),request.POST.get('choice')
         # insert data into models
+        # only insert if there is no record yet, the subsequent ones are probably false records
+        if len(ExerciseResult.objects.filter(
+                                owner= request.user,
+                                phase = request.POST.get('phase'),
+                                section = request.POST.get('section'),
+                                gestureTested = request.POST.get('target'),
+                                response = request.POST.get('choice'),
+                                ).values_list('gestureTested')) > 0:
+            return HttpResponse(status=500) 
+
         try:
             data = ExerciseResult(
                                 owner= request.user,
@@ -409,7 +382,7 @@ class Exercise(object):
             queryset = ExerciseResult.objects.filter(owner = self.user, phase = phase, section = section).order_by('created').values_list('gestureTested')
             progress_percent = len(queryset) / float(len(QUESTIONS) * 4)
 
-            # we only want the remaineder of the 20 questions of the section
+            # we only want the remainder of the 20 questions of the section
             cut = len(queryset) % 20
             if cut == 0:
                 queryset = []
@@ -502,6 +475,7 @@ class Exercise(object):
                     'section': section,
                     'targetGesture': unanswered,
                     'targetGestureVideo': VIDEOS['p1_training_{}Training'.format(unanswered)],
+                    'cycle': 1,
 
                 }
 
@@ -570,6 +544,7 @@ class Exercise(object):
                     'targetGesture': unanswered,
                     'targetGestureVideo1': VIDEOS['p2_training_{}Training_1'.format(unanswered)],
                     'targetGestureVideo2': VIDEOS['p2_training_{}Training_2'.format(unanswered)],
+                    'cycle': 1,
 
                 }
 
@@ -610,6 +585,7 @@ class Exercise(object):
                     'videoCutoff': P3_VIDEO_CUTOFF[unanswered][0],
 
 
+
                 }
 
             if phase == 'phase3' and section == 'training':
@@ -621,6 +597,7 @@ class Exercise(object):
                     'targetGesture': unanswered,
                     'targetGestureVideo1': VIDEOS['p3_training_{}Training_1'.format(unanswered)],
                     'targetGestureVideo2': VIDEOS['p3_training_{}Training_2'.format(unanswered)],
+                    'cycle': 1,
 
                 }
 

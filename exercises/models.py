@@ -2,43 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from pygments.lexers import get_all_lexers
-from pygments.styles import get_all_styles
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters.html import HtmlFormatter
-from pygments import highlight
-
-LEXERS = [item for item in get_all_lexers() if item[1]]
-LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
-STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
-
-
-class Snippet(models.Model):
-  created = models.DateTimeField(auto_now_add=True)
-  title = models.CharField(max_length=100, blank=True, default='')
-  code = models.TextField()
-  linenos = models.BooleanField(default=False)
-  language = models.CharField(choices=LANGUAGE_CHOICES, default='python', max_length=100)
-  style = models.CharField(choices=STYLE_CHOICES, default='friendly', max_length=100)
-  owner = models.ForeignKey('auth.User', related_name='snippets')
-  highlighted = models.TextField()
-
-  def save(self, *args, **kwargs):
-    """
-    Use the `pygments` library to create a highlighted HTML
-    representation of the code snippet.
-    """
-    lexer = get_lexer_by_name(self.language)
-    linenos = self.linenos and 'table' or False
-    options = self.title and {'title': self.title} or {}
-    formatter = HtmlFormatter(style=self.style, linenos=linenos,
-                              full=True, **options)
-    self.highlighted = highlight(self.code, lexer, formatter)
-    super(Snippet, self).save(*args, **kwargs)
-
-  class Meta:
-      ordering = ('created',)
-
+from datetime import datetime
 
 phase_choices = (
       ('phase1', 'Phase I'),
@@ -102,16 +66,19 @@ class PhaseSection(models.Model):
 
 
 class ExerciseResult(models.Model):
-  created = models.DateTimeField(auto_now_add = True)
+  created = models.DateTimeField(default=datetime.now, blank=True)
   owner = models.ForeignKey('auth.User')
   phase = models.CharField(max_length= 100, choices = phase_choices)
   # phase = models.ForeignKey('Phase', related_name='ExerciseResults')
   section = models.CharField(max_length= 100, choices = section_choices)
   # section = models.ForeignKey('Section', related_name='ExerciseResults')
   # # cycle describes how many times the section has been performed on user
-  # cycle = models.IntegerField()
+  # cycle = models.IntegerField(default = 1)
   gestureTested = models.CharField(max_length = 100)
   response = models.CharField(max_length = 100, choices = response_choices )
+
+  # class Meta:
+  #   unique_together = ('owner', 'phase', 'section', 'gestureTested', 'cycle')
 
 
 # p1_assessment_prefix = '/media/phase1/assessment/'
@@ -146,7 +113,7 @@ P3_VIDEO_CUTOFF = {
   'drive' : ( 20  , 20  , 21  , 22  ) ,
   'eat' : ( 19  , 20  , 19  , 20  ) ,
   'bird'  : ( 20  , 20  , 20  , 20  ) ,
-  'good'  : ( 23  , 24  , 21  , 23  ) ,
+  'goodbye'  : ( 23  , 24  , 21  , 23  ) ,
   'hello' : ( 23  , 23  , 23  , 22  ) ,
   'hug' : ( 21  , 21  , 21  , 20  ) ,
   'hungry'  : ( 20  , 20  , 21  , 20  ) ,
