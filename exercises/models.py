@@ -105,6 +105,23 @@ p3_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingm
 p3_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/feedback/'
 p3_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/training/'
 
+
+# s2p676t87j2cwx.cloudfront.net
+# "rtmp://RTMP-DISTRIBUTION-DOMAIN-NAME/cfx/st/VIDEO-FILE-NAME"
+# cloudfront for distro
+p1_assessment_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase1/assessment/'
+p1_feedback_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase1/feedback/'
+p1_training_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase1/training/'
+
+p2_assessment_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase2/assessment/'
+p2_feedback_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase2/feedback/'
+p2_training_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase2/training/'
+
+p3_assessment_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase3/assessment/'
+p3_feedback_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase3/feedback/'
+p3_training_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase3/training/'
+
+
 # phase 3 had video issues where the scenarios are not uniform in length so the buttons don't light up correctly. 
 # Each video must now have its own cutoff time
 P3_VIDEO_CUTOFF = {
