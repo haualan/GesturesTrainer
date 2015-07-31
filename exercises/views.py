@@ -53,16 +53,6 @@ class DashboardView(GroupRequiredMixin, generic.View):
 
 
 
-  all_sections = [
-        {'name': 'phase1-pretest', 'is_enabled': True},
-        {'name': 'phase1-training', 'is_enabled': False},
-        {'name': 'phase1-posttest1', 'is_enabled': False},
-        {'name': 'phase1-posttest2', 'is_enabled': False},
-
-    ]
-
-
-
   def get(self, request):
 
 
@@ -89,15 +79,6 @@ class UserResponseView(GroupRequiredMixin, generic.View):
 
         # print 'response posted......', request.POST.get('phase'), request.POST.get('section'), request.POST.get('target'),request.POST.get('choice')
         # insert data into models
-        # only insert if there is no record yet, the subsequent ones are probably false records
-        if len(ExerciseResult.objects.filter(
-                                owner= request.user,
-                                phase = request.POST.get('phase'),
-                                section = request.POST.get('section'),
-                                gestureTested = request.POST.get('target'),
-                                response = request.POST.get('choice'),
-                                ).values_list('gestureTested')) > 0:
-            return HttpResponse(status=500) 
 
         try:
             data = ExerciseResult(
@@ -110,7 +91,7 @@ class UserResponseView(GroupRequiredMixin, generic.View):
             data.save()
         except Exception,e: 
             print str(e)
-            return HttpResponse(status=500)
+            return HttpResponse(status=200)
 
         return HttpResponse(status=201)
 
@@ -198,7 +179,10 @@ phase_ordered_list = [
 
 section_ordered_list = [
     'pretest',
-    'training',
+    'training1',
+    'training2',
+    'training3',
+    'training4',
     'posttest1',
     'posttest2',
     'posttest3',
@@ -226,15 +210,35 @@ class Exercise(object):
             for j in section_ordered_list:
                 user_progress[i][j] = 0
 
-
-
         # update count from DB
         for i in q:
             user_progress[i[0]][i[1]] = i[2]
 
+        q = PhaseSection.objects.all().values_list('phase','section','start_date')
+
+        phaseSection_start_dates = {}
+        for i in phase_ordered_list:
+            phaseSection_start_dates[i] = {}
+            for j in section_ordered_list:
+                phaseSection_start_dates[i][j] = 0
+
+        # update count from DB
+        for i in q:
+            phaseSection_start_dates[i[0]][i[1]] = i[2]
+
+
+        # check if training2 is complete then update training3 to 1 week after the latest record's completion date
+        for i in phase_ordered_list:
+            if user_progress[i]['training2'] >= 20:
+                postponeTime = timedelta(weeks = 1) + ExerciseResult.objects.filter(phase = i, section = 'training2').values_list('created').order_by('-created')[0][0]
+                if postponeTime > phaseSection_start_dates[i]['training3']:
+                    # if the postponed time is later than the assigned time, then it needs to be updated to one week ahead
+                    user_progress[i]['training3'] = postponeTime
+
         # generate a list of dicts and determine whether section should be enabled
         today_date = timezone.now()
         previous_section_complete = True
+
 
         results = []
         found_next_section = False
@@ -246,48 +250,56 @@ class Exercise(object):
                 result['name'] = i + '_' +j
                 result['user_progress'] = user_progress[i][j]
 
-                phaseSection_start_date = PhaseSection.objects.filter(phase = i, section = j).values_list('start_date')[0][0]
-                result['phaseSection_start_date'] = phaseSection_start_date
+                # phaseSection_start_date = PhaseSection.objects.filter(phase = i, section = j).values_list('start_date')[0][0]
+                result['phaseSection_start_date'] = phaseSection_start_dates[i][j]
                 
-                # is today greater than section startdate?
-                if today_date > phaseSection_start_date:
-                    # what section is it?
-                    if j == 'training':
-                        if user_progress[i][j] < 40:
-                            # is previous section complete?
-                            if previous_section_complete:
-                                result['is_enabled'] = True
-                                previous_section_complete = False
+                # # is today greater than section startdate?
+                if today_date > phaseSection_start_dates[i][j]:
+                #     # what section is it?
+                #     if j in ['training1', 'training2','training3', 'training4']:
+                #         if user_progress[i][j] < 40:
+                #             # is previous section complete?
+                #             if previous_section_complete:
+                #                 result['is_enabled'] = True
+                #                 previous_section_complete = False
 
 
-                        elif user_progress[i][j] >=40 and user_progress[i][j] < 80:
-                            # has it been one week after start_date
-                            secondCycleCompleteDateTime = ExerciseResult.objects.filter(phase = i, section = j).values_list('created').order_by('created')[40-1][0]
-                            if (today_date > phaseSection_start_date + timedelta(weeks = 1)) and (today_date > secondCycleCompleteDateTime + timedelta(weeks = 1)):
-                                # is previous section complete?
-                                if previous_section_complete:
-                                    result['is_enabled'] = True
-                                    previous_section_complete = False
-                                else:
-                                    result['is_enabled'] = False
-                                    previous_section_complete = True
+                #         elif user_progress[i][j] >=40 and user_progress[i][j] < 80:
+                #             # has it been one week after start_date
+                #             secondCycleCompleteDateTime = ExerciseResult.objects.filter(phase = i, section = j).values_list('created').order_by('created')[40-1][0]
+                #             if (today_date > phaseSection_start_date + timedelta(weeks = 1)) and (today_date > secondCycleCompleteDateTime + timedelta(weeks = 1)):
+                #                 # is previous section complete?
+                #                 if previous_section_complete:
+                #                     result['is_enabled'] = True
+                #                     previous_section_complete = False
+                #                 else:
+                #                     result['is_enabled'] = False
+                #                     previous_section_complete = True
 
 
-                        else:
-                            result['is_enabled'] = False
-                            previous_section_complete = True
+                #         else:
+                #             result['is_enabled'] = False
+                #             previous_section_complete = True
 
 
+                #     else:
+                #         if user_progress[i][j] >= 20:
+                #             result['is_enabled'] = False
+                #             previous_section_complete = True
+                #         else:
+                #             # is previous section complete?
+                #             if previous_section_complete:
+                #                 result['is_enabled'] = True
+                #                 previous_section_complete = False
+
+                    if user_progress[i][j] >= 20:
+                        result['is_enabled'] = False
+                        previous_section_complete = True
                     else:
-                        if user_progress[i][j] >= 20:
-                            result['is_enabled'] = False
-                            previous_section_complete = True
-                        else:
-                            # is previous section complete?
-                            if previous_section_complete:
-                                result['is_enabled'] = True
-                                previous_section_complete = False
-
+                        # is previous section complete?
+                        if previous_section_complete:
+                            result['is_enabled'] = True
+                            previous_section_complete = False
 
                 else:
                     result['is_enabled'] = False
@@ -307,7 +319,7 @@ class Exercise(object):
                         'name': i + '_' +j, 
                         'user_progress': user_progress[i][j], 
                         'is_enabled': True,
-                        'phaseSection_start_date': phaseSection_start_date
+                        'phaseSection_start_date': phaseSection_start_dates[i][j]
                         }
                         )
 
@@ -332,7 +344,7 @@ class Exercise(object):
                 'doYouUnderstandVideo': VIDEOS['p{}_assessment_doYouUnderstand'.format(phase_num)]
             }
 
-        if section == 'training':
+        if section in ['training1', 'training2', 'training3','training4']:
             results = {
                 'greetingVideo': VIDEOS['p{}_training_greetingAndInstruction'.format(phase_num)],
                 'doYouUnderstandVideo': VIDEOS['p{}_training_doYouUnderstand'.format(phase_num)]
@@ -358,15 +370,10 @@ class Exercise(object):
 
         print 'endCurrentSection count:', count
 
-        if count == 0:
-            return False
-        if count % 20 == 0:
+        if count >= 20:
             return True
 
         return False
-
-
-
 
 
     def generateQuestion(self, phase, section):
@@ -380,20 +387,22 @@ class Exercise(object):
         # section_id = Section.objects.filter(section = section).values_list('id')[0][0]
         # queryset = ExerciseResult.objects.filter(owner = self.user, phase = phase_id, section = section_id) 
 
-        if section == 'training':
-            queryset = ExerciseResult.objects.filter(owner = self.user, phase = phase, section = section).order_by('created').values_list('gestureTested')
-            progress_percent = len(queryset) / float(len(QUESTIONS) * 4)
+        # if section == 'training':
+        #     queryset = ExerciseResult.objects.filter(owner = self.user, phase = phase, section = section).order_by('created').values_list('gestureTested')
+        #     progress_percent = len(queryset) / float(len(QUESTIONS) * 4)
 
-            # we only want the remainder of the 20 questions of the section
-            cut = len(queryset) % 20
-            if cut == 0:
-                queryset = []
-            else:
-                queryset = list(queryset)[-cut:]
-        else:
-            # if the section is training, then we only take the last mod 20 of the results
-            queryset = ExerciseResult.objects.filter(owner = self.user, phase = phase, section = section).values_list('gestureTested')
-            progress_percent = len(queryset) / float(len(QUESTIONS))
+        #     # we only want the remainder of the 20 questions of the section
+        #     cut = len(queryset) % 20
+        #     if cut == 0:
+        #         queryset = []
+        #     else:
+        #         queryset = list(queryset)[-cut:]
+        # else:
+        #     # if the section is training, then we only take the last mod 20 of the results
+
+
+        queryset = ExerciseResult.objects.filter(owner = self.user, phase = phase, section = section).values_list('gestureTested')
+        progress_percent = len(queryset) / float(len(QUESTIONS))
 
         queryset = set(map(lambda x: x[0],queryset))
 
@@ -469,7 +478,7 @@ class Exercise(object):
 
                 # return questionSet
 
-            if phase == 'phase1' and section == 'training':
+            if phase == 'phase1' and section in ['training1', 'training2', 'training3', 'training4']:
 
                 questionSet = {
                     # basic values for the section
@@ -477,7 +486,6 @@ class Exercise(object):
                     'section': section,
                     'targetGesture': unanswered,
                     'targetGestureVideo': VIDEOS['p1_training_{}Training'.format(unanswered)],
-                    'cycle': 1,
 
                 }
 
@@ -537,7 +545,7 @@ class Exercise(object):
 
                 }
 
-            if phase == 'phase2' and section == 'training':
+            if phase == 'phase2' and section in ['training1', 'training2', 'training3', 'training4']:
 
                 questionSet = {
                     # basic values for the section
@@ -546,7 +554,7 @@ class Exercise(object):
                     'targetGesture': unanswered,
                     'targetGestureVideo1': VIDEOS['p2_training_{}Training_1'.format(unanswered)],
                     'targetGestureVideo2': VIDEOS['p2_training_{}Training_2'.format(unanswered)],
-                    'cycle': 1,
+            
 
                 }
 
@@ -590,7 +598,7 @@ class Exercise(object):
 
                 }
 
-            if phase == 'phase3' and section == 'training':
+            if phase == 'phase3' and section in ['training1', 'training2', 'training3', 'training4']:
 
                 questionSet = {
                     # basic values for the section
@@ -599,7 +607,7 @@ class Exercise(object):
                     'targetGesture': unanswered,
                     'targetGestureVideo1': VIDEOS['p3_training_{}Training_1'.format(unanswered)],
                     'targetGestureVideo2': VIDEOS['p3_training_{}Training_2'.format(unanswered)],
-                    'cycle': 1,
+      
 
                 }
 

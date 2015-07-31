@@ -80,8 +80,8 @@ ROOT_URLCONF = 'GesturesTrainer.urls'
 WSGI_APPLICATION = 'GesturesTrainer.wsgi.application'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-# 30 mins cookies
-SESSION_COOKIE_AGE = 60 * 30
+# 30 mins cookies, turned off because it kicks user out automatically after 30 mins
+# SESSION_COOKIE_AGE = 60 * 30
 
 
 # Database
