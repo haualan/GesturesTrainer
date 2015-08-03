@@ -96,36 +96,36 @@ class ExerciseResult(models.Model):
 # p3_feedback_prefix = '/media/phase3/feedback/'
 # p3_training_prefix = '/media/phase3/training/'
 
-p1_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase1/assessment/'
-p1_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase1/feedback/'
-p1_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase1/training/'
+# p1_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase1/assessment/'
+# p1_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase1/feedback/'
+# p1_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase1/training/'
 
-p2_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase2/assessment/'
-p2_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase2/feedback/'
-p2_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase2/training/'
+# p2_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase2/assessment/'
+# p2_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase2/feedback/'
+# p2_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase2/training/'
 
-p3_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/assessment/'
-p3_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/feedback/'
-p3_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/training/'
+# p3_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/assessment/'
+# p3_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/feedback/'
+# p3_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmedia/phase3/training/'
 
 
 # s2p676t87j2cwx.cloudfront.net
 # "rtmp://RTMP-DISTRIBUTION-DOMAIN-NAME/cfx/st/VIDEO-FILE-NAME"
 # cloudfront for distro
-p1_assessment_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase1/assessment/'
-p1_feedback_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase1/feedback/'
-p1_training_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase1/training/'
+# p1_assessment_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase1/assessment/'
+# p1_feedback_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase1/feedback/'
+# p1_training_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase1/training/'
 
-p2_assessment_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase2/assessment/'
-p2_feedback_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase2/feedback/'
-p2_training_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase2/training/'
+# p2_assessment_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase2/assessment/'
+# p2_feedback_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase2/feedback/'
+# p2_training_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase2/training/'
 
-p3_assessment_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase3/assessment/'
-p3_feedback_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase3/feedback/'
-p3_training_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase3/training/'
+# p3_assessment_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase3/assessment/'
+# p3_feedback_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase3/feedback/'
+# p3_training_prefix = 'rtmp://s2p676t87j2cwx.cloudfront.net/cfx/st/mp4:phase3/training/'
 
 
-# new aws
+# new awsand cloudfront
 p1_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmediav2/'
 p1_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmediav2/'
 p1_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmediav2/'
@@ -137,6 +137,7 @@ p2_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmed
 p3_assessment_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmediav2/'
 p3_feedback_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmediav2/'
 p3_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmediav2/'
+
 
 
 
@@ -505,7 +506,7 @@ VIDEOS = {
   'p3_assessment_posttest3_walkGesture':  '{}Phase III assessment_posttest 3_walking.mp4'.format(p3_assessment_prefix),
   'p3_assessment_posttest3_welcomeGesture':  '{}Phase III assessment_posttest 3_welcome.mp4'.format(p3_assessment_prefix),
   'p3_assessment_posttest3_whereGesture':  '{}Phase III assessment_posttest 3_where.mp4'.format(p3_assessment_prefix),
-  'p3_assessment_posttest3_wrongGesture':  '{}Phase III assessment_posttest _wrong.mp4'.format(p3_assessment_prefix),
+  'p3_assessment_posttest3_wrongGesture':  '{}Phase III assessment_posttest 3_wrong.mp4'.format(p3_assessment_prefix),
 
 
 
@@ -613,6 +614,25 @@ QUESTIONS = {
   'where': {'choices': ['mine','where','yes']},
   'wrong': {'choices': ['wrong','welcome','eat']},
 }
+
+# test videolinks for validity
+# import requests
+# def testLink(vidKeylink):
+#   r = requests.get(vidKeylink[1])
+#   return (r.status_code, vidKeylink[0])
+
+# from multiprocessing import Pool
+# p = Pool(40)
+
+# all_responses = list(p.map(testLink, VIDEOS.items()))
+# summary = {}
+# for i in all_responses:
+#   if i[0] not in summary:
+#     summary[i[0]] = []
+# summary[i[0]].append(i[1])
+
+# print summary
+
 
 START_DATE = '09/18/1986'
 

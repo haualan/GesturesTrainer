@@ -2,6 +2,7 @@
 
 {% block customScripts %}
 
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://content.jwplatform.com/libraries/IUkQRbu5.js"></script>
 <script type="text/javascript">
@@ -28,6 +29,15 @@
 {% endblock customScripts %}
 
 {% block custombody_content %}
+
+<style type="text/css">
+/* As per Catherine requirements to make gesture more bold*/
+#trainingBtn, #instructionDisplayBtn  {
+  color: red;
+  font-weight: bold;
+  font-size: larger;
+}
+</style>
 
 <div class="container">
 <br>
@@ -124,6 +134,7 @@
 
   {% if phase == "phase1"%}
     {% if section == "pretest"%}
+        <p id="phase1pretest"></p>
 
 
         <div id="myPlayer"></div>
@@ -271,7 +282,9 @@
     {% endif %}
 
     {% if section == "training1" or section == "training2" or section == "training3" or section == "training4" %}
-    
+
+      <p id="phase1training"></p>
+
       <div id="myPlayer"></div>
       <script type="text/javascript">
           var notResponded = true;
@@ -369,7 +382,8 @@
     {% endif %}
 
     {% if section == "posttest1" or section == "posttest2" or section == "posttest3" %}
-      <!-- <p>phase1 posttest yea</p> -->
+
+      <p id="phase1posttest"></p>
       <div id="myPlayer"></div>
         <script type="text/javascript">
           var loopCounter = 0;
@@ -450,6 +464,8 @@
                     else
                     {
                       loopCounter ++;
+                      $("#choiceABtn, #choiceBBtn, #choiceCBtn, #dunnoBtn").addClass("disabled");
+
                       thePlayer.playlistItem(0);
                     }
                     
@@ -547,6 +563,7 @@
   {% if phase == "phase2"%}
     {% if section == "pretest"%}
 
+        <p id="phase2pretest"></p>
         <div id="myPlayer"></div>
         <script type="text/javascript">
           var notResponded = true;
@@ -674,6 +691,7 @@
 
     {% if section == "training1" or section == "training2" or section == "training3" or section == "training4" %}
 
+      <p id="phase2training"></p>
       <div id="myPlayer"></div>
       <script type="text/javascript">
           var notResponded = true;
@@ -776,6 +794,7 @@
 
     {% if section == "posttest1" or section == "posttest2" or section == "posttest3" %}
 
+        <p id="phase2posttest"></p>
         <div id="myPlayer"></div>
         <script type="text/javascript">
           var loopCounter = 0
@@ -831,6 +850,8 @@
 
                     } else {
                       loopCounter ++;
+                      $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass("disabled");
+                      $("#instructionDisplayBtn").html("...");
                       thePlayer.playlistItem(0);
                     }
                     
@@ -921,6 +942,7 @@
   {% if phase == "phase3"%}
     {% if section == "pretest"%}
 
+        <p id="phase3pretest"></p>
         <div id="myPlayer"></div>
         <script type="text/javascript">
           var notResponded = true;
@@ -1047,6 +1069,7 @@
 
     {% if section == "training1" or section == "training2" or section == "training3" or section == "training4" %}
 
+      <p id="phase3training"></p>
       <div id="myPlayer"></div>
       <script type="text/javascript">
           var notResponded = true;
@@ -1153,6 +1176,7 @@
 
     {% if section == "posttest1" or section == "posttest2" or section == "posttest3" %}
 
+        <p id="phase3posttest"></p>
         <div id="myPlayer"></div>
         <script type="text/javascript">
           var loopCounter = 0;
@@ -1186,7 +1210,7 @@
                   onPlaylistComplete:function(){
                     // user timed out, disable choices, timedOut
                     if (loopCounter == 1 || notResponded == false){
-                      console.log("enable buttons");
+                      console.log("disable buttons");
                       $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass("disabled");
                       $("#nextBtn").removeClass("disabled");
 
@@ -1207,6 +1231,8 @@
                       }
                     } else {
                       loopCounter ++;
+                      $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass("disabled");
+                      $("#instructionDisplayBtn").html("...");
                       thePlayer.playlistItem(0);
 
                     }
