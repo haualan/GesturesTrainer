@@ -5,19 +5,19 @@ from django.db import models
 from datetime import datetime
 
 phase_choices = (
-      ('phase1', 'Phase I'),
-      ('phase2', 'Phase II'),
-      ('phase3', 'Phase III'),
+      ('phase1', 'Phase 1'),
+      ('phase2', 'Phase 2'),
+      ('phase3', 'Phase 3'),
   )
 section_choices = (
       ('pretest', 'Pre-test'),
-      ('training1', 'Training'),
-      ('training2', 'Training'),
-      ('training3', 'Training'),
-      ('training4', 'Training'),
-      ('posttest1', 'Post-Test I'),
-      ('posttest2', 'Post-Test II'),
-      ('posttest3', 'Post-Test III'),
+      ('training1', 'Training 1'),
+      ('training2', 'Training 2'),
+      ('training3', 'Training 3'),
+      ('training4', 'Training 4'),
+      ('posttest1', 'Post-Test 1'),
+      ('posttest2', 'Post-Test 2'),
+      ('posttest3', 'Post-Test 3'),
     )
 
 response_choices = (

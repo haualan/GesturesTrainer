@@ -43,6 +43,7 @@ def autoregister(*app_list):
         class ModAdmin(ImportExportModelAdmin):
           if model.__name__ == 'ExerciseResult':
             resource_class = ExerciseResultResource
+            list_filter = ('owner','phase', 'section', 'gestureTested')
           list_display = list(map(lambda x: x.name ,model._meta.fields))[1:]
         admin.site.register(model, ModAdmin)
       except AlreadyRegistered:
