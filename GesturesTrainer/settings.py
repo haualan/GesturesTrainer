@@ -55,6 +55,57 @@ MIDDLEWARE_CLASSES = (
 
 )
 
+ALLOWED_HOSTS = [
+    '.wingcheecuhk.me', # Allow domain and subdomains
+    '.wingcheecuhk.me.', # Also allow FQDN and subdomains
+    'localhost', 
+    '127.0.0.1',
+]
+
+SOCIAL_AUTH_FACEBOOK_KEY = '693217374157462'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'c27cee84b8c849c075046743a74ce937'
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'en_US'}
+
+
+
+# LOGIN_URL          = '/login-form/'
+# LOGIN_REDIRECT_URL = '/logged-in/'
+# LOGIN_ERROR_URL    = '/login-error/'
+
+# SOCIAL_AUTH_USER_MODEL = 'profiles.User'
+
+# only for mysql backend to enforce field length, some oauth ppl use longer retarded keys
+SOCIAL_AUTH_UID_LENGTH = 223
+
+SOCIAL_AUTH_DEFAULT_USERNAME = 'user'
+
+# only needed if email is username
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = False
+
+# for security
+SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
+
+# These URLs are used on different steps of the auth process, some for successful results and others for error situations.
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/dashboard'
+# Used to redirect the user once the auth process ended successfully. The value of ?next=/foo is used if it was present
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/dashboard'
+# URL where the user will be redirected in case of an error
+SOCIAL_AUTH_LOGIN_URL = '/dashboard'
+# Is used as a fallback for LOGIN_ERROR_URL
+# SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/new-users-redirect-url/'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/dashboard'
+# Used to redirect new registered users, will be used in place of SOCIAL_AUTH_LOGIN_REDIRECT_URL if defined. Note that ?next=/foo is appended if present
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/dashboard'
+# Like SOCIAL_AUTH_NEW_USER_REDIRECT_URL but for new associated accounts (user is already logged in). Used in place of SOCIAL_AUTH_LOGIN_REDIRECT_URL
+SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/dashboard'
+# The user will be redirected to this URL when a social account is disconnected
+SOCIAL_AUTH_INACTIVE_USER_URL = '/dashboard'
+# Inactive users can be redirected to this URL when trying to authenticate.
+
+
 # social oauth methods
 AUTHENTICATION_BACKENDS = (
     # 'social.backends.open_id.OpenIdAuth',
@@ -63,6 +114,7 @@ AUTHENTICATION_BACKENDS = (
     # 'social.backends.google.GoogleOAuth',
     # 'social.backends.twitter.TwitterOAuth',
     # 'social.backends.yahoo.YahooOpenId',
+    'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -70,6 +122,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'social.apps.django_app.context_processors.backends',
     'social.apps.django_app.context_processors.login_redirect',
     'django.contrib.auth.context_processors.auth',
+
 )
 
 
@@ -87,10 +140,21 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'GestureLearningDB',
+        'USER': 'sa',
+        'PASSWORD': 'p0o9i8u7',
+        'HOST': 'gesturelearningdb.c2m7xlffp3xl.ap-southeast-1.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 
