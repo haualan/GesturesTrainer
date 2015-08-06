@@ -233,7 +233,7 @@ class Exercise(object):
                 postponeTime = timedelta(weeks = 1) + ExerciseResult.objects.filter(phase = i, section = 'training2').values_list('created').order_by('-created')[0][0]
                 if postponeTime > phaseSection_start_dates[i]['training3']:
                     # if the postponed time is later than the assigned time, then it needs to be updated to one week ahead
-                    user_progress[i]['training3'] = postponeTime
+                    phaseSection_start_dates[i]['training3'] = postponeTime
 
         # generate a list of dicts and determine whether section should be enabled
         today_date = timezone.now()
@@ -254,6 +254,7 @@ class Exercise(object):
                 result['phaseSection_start_date'] = phaseSection_start_dates[i][j]
                 
                 # # is today greater than section startdate?
+                # print 'date types confusion:', type(today_date), type(phaseSection_start_dates[i][j]), type(user_progress[i][j])
                 if today_date > phaseSection_start_dates[i][j]:
                 #     # what section is it?
                 #     if j in ['training1', 'training2','training3', 'training4']:

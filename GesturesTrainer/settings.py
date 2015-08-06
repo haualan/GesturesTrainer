@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'GesturesTrainer.wsgi.application'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # 30 mins cookies, turned off because it kicks user out automatically after 30 mins
 # SESSION_COOKIE_AGE = 60 * 30
-
+# SESSION_SAVE_EVERY_REQUEST = True
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
