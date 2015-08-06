@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
 
 phase_choices = (
       ('phase1', 'Phase 1'),
@@ -69,7 +69,7 @@ class PhaseSection(models.Model):
 
 
 class ExerciseResult(models.Model):
-  created = models.DateTimeField(default=datetime.now, blank=True)
+  created = models.DateTimeField(default=timezone.now, blank=True)
   owner = models.ForeignKey('auth.User')
   phase = models.CharField(max_length= 100, choices = phase_choices)
   # phase = models.ForeignKey('Phase', related_name='ExerciseResults')
