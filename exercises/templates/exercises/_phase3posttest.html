@@ -1,0 +1,153 @@
+        <p id="phase3posttest"></p>
+        <div id="myPlayer"></div>
+        <script type="text/javascript">
+          var loopCounter = 0;
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                            
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                            
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) { 
+                    if(this.getPlaylistIndex() == 0){
+                      if (event.position >= 6 && notResponded) { 
+                        $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                      }
+                      if (event.position >= {{generateQuestion.videoCutoff}} && notResponded) { 
+                        $("#correctBtn, #incorrectBtn, #dunnoBtn").removeClass("disabled");
+                      }
+                    }
+                
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    if (loopCounter == 1 || notResponded == false){
+                      console.log("disable buttons");
+                      $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass("disabled");
+                      $("#nextBtn").removeClass("disabled");
+
+                      if (notResponded){
+                        var postdata={
+                        'choice': 'timedOut',
+                        'target':"{{generateQuestion.targetGesture}}",
+                        'phase': "{{phase}}",
+                        'section': "{{section}}",
+                        }
+                        $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                          function(){
+                            // checkProgress(postdata);
+                            $("#nextBtn").removeClass("disabled");
+                          });
+                      } else {
+                        $("#nextBtn").removeClass("disabled");
+                      }
+                    } else {
+                      loopCounter ++;
+                      $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass("disabled");
+                      thePlayer.playlistItem(0);
+
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    console.log(index["index"]);
+                    if (index["index"] ==  1 ){
+                      console.log("display gesture");
+                      $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                    } 
+
+
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+          $("#correctBtn, #incorrectBtn, #dunnoBtn").click(function(){
+            console.log("some button was clicked.");
+            notResponded = false;
+            var thisbutton = $(this);
+            var postdata={
+              'choice': $(this).val(),
+              'target':"{{generateQuestion.targetGesture}}",
+              'phase': "{{phase}}",
+              'section': "{{section}}",
+            }
+
+            $("#correctBtn, #incorrectBtn, #dunnoBtn").addClass('disabled');
+
+            $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                function(){
+
+                  if (thisbutton.val() == "correct" ){
+                      thePlayer.load([{
+                                        file:"{{generateQuestion.FeedbackCorrect}}",
+                                        image:"{{robothead_small_image}}",
+                                      }
+                                    ]);
+                  } else {
+                      thePlayer.load([{
+                                        file:"{{generateQuestion.FeedbackWrong}}",
+                                        image:"{{robothead_small_image}}",
+                                      }
+                                    ]);
+                  }
+
+                  thePlayer.onPlaylistComplete(
+                      function(){
+                        // checkProgress(postdata);
+                      }
+                    );
+
+              });
+            
+
+
+
+          });
+        });
+        </script>
+
+
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-block btn-primary disabled" id="instructionDisplayBtn" name="instructionDisplayBtn" value=""> ... </button>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+      <br>
+      <div class="row">
+
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="correctBtn" name="correctBtn" value="correct"> Correct </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="incorrectBtn" name="incorrectBtn" value="incorrect"> Incorrect </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="dunnoBtn" name="dunnoBtn" value="dontKnow"> Don't Know </button>
+          </div>
+
+      </div>

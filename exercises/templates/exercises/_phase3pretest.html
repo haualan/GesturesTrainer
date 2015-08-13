@@ -1,0 +1,129 @@
+        <p id="phase3pretest"></p>
+        <div id="myPlayer"></div>
+        <script type="text/javascript">
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                            
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                            
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) { 
+                    if(this.getPlaylistIndex() == 0){
+                      if (event.position >= 6 && notResponded) { 
+                        $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                      }
+                      if (event.position >= {{generateQuestion.videoCutoff}} && notResponded) { 
+                        $("#correctBtn, #incorrectBtn").removeClass("disabled");
+                      }
+                    }
+                
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    console.log("enable buttons");
+                    $("#correctBtn, #incorrectBtn").addClass("disabled");
+                    $("#nextBtn").removeClass("disabled");
+
+                    if (notResponded){
+                      var postdata={
+                      'choice': 'timedOut',
+                      'target':"{{generateQuestion.targetGesture}}",
+                      'phase': "{{phase}}",
+                      'section': "{{section}}",
+                      }
+                      $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                        function(){
+                          // checkProgress(postdata);
+                          $("#nextBtn").removeClass("disabled");
+                        });
+                        
+                    } else {
+                      $("#nextBtn").removeClass("disabled");
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    console.log(index["index"]);
+                    if (index["index"] ==  1 ){
+                      console.log("display gesture");
+                      $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                    } 
+
+
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+          $("#correctBtn, #incorrectBtn").click(function(){
+            console.log("some button was clicked.");
+            notResponded = false;
+            var thisbutton = $(this);
+            var postdata={
+              'choice': $(this).val(),
+              'target':"{{generateQuestion.targetGesture}}",
+              'phase': "{{phase}}",
+              'section': "{{section}}",
+            }
+            $.post('{% url 'exercises:userResponse' %}',postdata).done(
+              // checkProgress(postdata)
+                function(){
+                  thePlayer.load([{
+                                file:"{{generateQuestion.FeedbackThanks}}",
+                                image:"{{robothead_small_image}}",
+                              }
+                            ]);
+                }
+              );
+            $("#correctBtn, #incorrectBtn").addClass('disabled');
+            
+            
+
+
+
+          });
+        });
+        </script>
+
+
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-block btn-primary disabled" id="instructionDisplayBtn" name="instructionDisplayBtn" value=""> ... </button>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+      <br>
+      <div class="row">
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="correctBtn" name="correctBtn" value="correct"> Correct </button>
+          </div>
+          <div class="col-sm-4">
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="incorrectBtn" name="incorrectBtn" value="incorrect"> Incorrect </button>
+          </div>
+
+      </div>

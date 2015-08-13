@@ -1,0 +1,151 @@
+<p id="phase1pretest"></p>
+
+
+        <div id="myPlayer"></div>
+        <script type="text/javascript">
+          var notResponded = true;
+          var thePlayer = jwplayer("myPlayer").setup({
+                playlist: [
+                             {
+                                file:"{{generateQuestion.instructionPreGestureVideo}}", 
+                                image:"{{robothead_small_image}}",
+                              },
+                             {
+                                file:"{{generateQuestion.targetGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.instructionPostGestureVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.choiceAVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.choiceBVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.choiceCVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+                              {
+                                file:"{{generateQuestion.MakeAChoiceVideo}}",
+                                image:"{{robothead_small_image}}",
+                              },
+
+                  ],
+                  width: "100%",
+              aspectratio: "595:576",
+              stretching: "exactfit",
+              autostart: true,
+              events:{ 
+                  onTime: function(event) { 
+                    if(this.getPlaylistIndex() == 6){
+                      if (event.position >= 12 && notResponded) { 
+                        $("#choiceABtn, #choiceBBtn, #choiceCBtn").removeClass("disabled");
+                      }
+                    }
+                
+                  },
+                  onPlaylistComplete:function(){
+                    // user timed out, disable choices, timedOut
+                    console.log("enable buttons");
+                    $("#choiceABtn, #choiceBBtn, #choiceCBtn").addClass("disabled");
+                    
+
+                    if (notResponded){
+                      var postdata={
+                      'choice': 'timedOut',
+                      'target':"{{generateQuestion.targetGesture}}",
+                      'phase': "{{phase}}",
+                      'section': "{{section}}",
+                      }
+                      $.post('{% url 'exercises:userResponse' %}',postdata).done(
+                        function(){
+                          // checkProgress(postdata);
+                          $("#nextBtn").removeClass("disabled");
+                        }
+                      );
+                    } else {
+                      $("#nextBtn").removeClass("disabled");
+                    }
+                    
+                    
+                  },
+                  onPlaylistItem:function(index, playlist){
+                    console.log(index["index"]);
+                    if (index["index"] == 3){
+                      console.log("display A");
+                      $("#choiceABtn").html("A. {{generateQuestion.choiceA}}");
+                    }  else if (index["index"] == 4) {
+                      console.log("display B");
+                      $("#choiceBBtn").html("B. {{generateQuestion.choiceB}}");
+                    }  else if (index["index"] == 5) {
+                      console.log("display C");
+                      $("#choiceCBtn").html("C. {{generateQuestion.choiceC}}");
+                    }
+
+
+                  }
+                }
+              }); 
+            //stop player manual controls
+              thePlayer.setControls(false);
+
+
+
+        $(document).ready(function () {
+
+
+
+          $.getScript("/static/js/setcsrf.js", function(){
+
+             console.log("setcrsf.js loaded");
+
+          });
+
+          $("#choiceABtn, #choiceBBtn, #choiceCBtn").click(function(){
+            console.log("some button was clicked.");
+            notResponded = false;
+            var thisbutton = $(this);
+            var postdata={
+              'choice': $(this).val(),
+              'target':"{{generateQuestion.targetGesture}}",
+              'phase': "{{phase}}",
+              'section': "{{section}}",
+            }
+            $.post('{% url 'exercises:userResponse' %}',postdata).done(
+              // checkProgress(postdata)
+                function(){
+                  thePlayer.load([{
+                                file:"{{generateQuestion.FeedbackThanks}}",
+                                image:"{{robothead_small_image}}",
+                              }
+                            ]);
+                }
+
+              );
+            $("#choiceABtn, #choiceBBtn, #choiceCBtn").addClass('disabled');
+            
+
+
+
+
+          });
+        });
+        </script>
+
+      <div class="row">
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="choiceABtn" name="choiceABtn" value="{{generateQuestion.choiceA}}"> A </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="choiceBBtn" name="choiceBBtn" value="{{generateQuestion.choiceB}}"> B </button>
+          </div>
+          <div class="col-sm-4">
+              <button type="button" class="btn btn-block btn-primary disabled" id="choiceCBtn" name="choiceCBtn" value="{{generateQuestion.choiceC}}"> C </button>
+          </div>
+
+      </div>
