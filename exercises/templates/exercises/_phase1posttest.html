@@ -1,3 +1,4 @@
+{% load i18n %}
   <p id="phase1posttest"></p>
       <div id="myPlayer"></div>
         <script type="text/javascript">
@@ -91,13 +92,13 @@
                     console.log(index["index"]);
                     if (index["index"] == 3){
                       console.log("display A");
-                      $("#choiceABtn").html("A. {{generateQuestion.choiceA}}");
+                      $("#choiceABtn").html("A. {% trans generateQuestion.choiceA %}");
                     }  else if (index["index"] == 4) {
                       console.log("display B");
-                      $("#choiceBBtn").html("B. {{generateQuestion.choiceB}}");
+                      $("#choiceBBtn").html("B. {% trans generateQuestion.choiceB %}");
                     }  else if (index["index"] == 5) {
                       console.log("display C");
-                      $("#choiceCBtn").html("C. {{generateQuestion.choiceC}}");
+                      $("#choiceCBtn").html("C. {% trans generateQuestion.choiceC %}");
                     }
 
 
@@ -173,7 +174,7 @@
               <button type="button" class="btn btn-block btn-primary disabled" id="choiceCBtn" name="choiceCBtn" value="{{generateQuestion.choiceC}}"> C </button>
           </div>
           <div class="col-sm-3">
-              <button type="button" class="btn btn-block btn-primary disabled" id="dunnoBtn" name="dunnoBtn" value="dontKnow"> Don't Know </button>
+              <button type="button" class="btn btn-block btn-primary disabled" id="dunnoBtn" name="dunnoBtn" value="dontKnow">{% trans "Don't Know" %}</button>
           </div>
 
       </div>

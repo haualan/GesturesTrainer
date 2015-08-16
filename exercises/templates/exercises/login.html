@@ -1,6 +1,7 @@
 
 {% extends 'exercises/layout.html' %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block customScripts %}
 
@@ -21,6 +22,16 @@ body {
   visibility: hidden;
 }
 
+.btn_facebook_login {
+    border: 1px solid #3b5a9b;
+    background: #5477ba;
+    background: -moz-linear-gradient(top,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(1%,#90a7d4),color-stop(4%,#5477ba),color-stop(100%,#3b5a9b));
+    background: -webkit-linear-gradient(top,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+    background: -o-linear-gradient(top,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+    background: -ms-linear-gradient(top,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+    background: linear-gradient(to bottom,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+}
 
   </style>
 
@@ -28,9 +39,6 @@ body {
 {% endblock customScripts %}
 
 {% block custombody_content %}
-
-
-
 
 
   <div class="container" style="padding: 100px">
@@ -41,7 +49,7 @@ body {
 
       <div class="panel panel-default">
         <div class="panel-heading">
-          <strong>Gestures Trainer Portal Login</strong>
+          <strong>{% trans "Gestures Trainer Portal Login" %}</strong>
         </div>
         <div class="panel-body">
           <!-- <form method="post" action="index.html">
@@ -56,7 +64,7 @@ body {
             <input class="btn btn-success" type="submit" name="commit" value="Login">
           </form> -->
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<p>{% trans "Your username and password didn't match. Please try again." %}</p>
 {% endif %}
           <form method="post" action="{% url 'exercises:login' %}">
           {% csrf_token %}
@@ -72,15 +80,15 @@ body {
             
 
             <div class="form-group">
-              <label for="id_username">Username:</label>
+              <label for="id_username">{% trans "User" %}:</label>
               <input class="form-control" id="id_username" maxlength="254" name="username" type="text">
-              <label for="id_password">Password:</label>
+              <label for="id_password">{% trans "Password" %}:</label>
               <input class="form-control" id="id_password" name="password" type="password">
             </div>
 
 
 
-            <input type="submit" class="btn btn-primary" value="login" />
+            <input type="submit" class="btn btn-block btn-primary" value="{% trans "login" %}" />
             {% if next %}
               <input type="hidden" name="next" value="{{ next }}" />
             {% else %}
@@ -93,7 +101,17 @@ body {
           <br>
           
 
-             <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Login with Facebook</a>
+
+             <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="btn btn-primary btn-block btn_facebook_login">
+              <span class="icon" style="width:40px">
+                <img  src="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yo/r/jVG1f1GslU7.png" alt="{% trans "Login with Facebook" %}" width="31" height="31">
+              </span>
+              <span class="text" style="margin-left:4px;">
+                <span class="brief">{% trans "Login with Facebook" %}</span> 
+              </span>
+               
+             </a>
+
 
           
           

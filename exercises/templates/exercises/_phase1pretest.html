@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <p id="phase1pretest"></p>
 
 
@@ -78,13 +80,13 @@
                     console.log(index["index"]);
                     if (index["index"] == 3){
                       console.log("display A");
-                      $("#choiceABtn").html("A. {{generateQuestion.choiceA}}");
+                      $("#choiceABtn").html("A. {% trans generateQuestion.choiceA %}");
                     }  else if (index["index"] == 4) {
                       console.log("display B");
-                      $("#choiceBBtn").html("B. {{generateQuestion.choiceB}}");
+                      $("#choiceBBtn").html("B. {% trans generateQuestion.choiceB %}");
                     }  else if (index["index"] == 5) {
                       console.log("display C");
-                      $("#choiceCBtn").html("C. {{generateQuestion.choiceC}}");
+                      $("#choiceCBtn").html("C. {% trans generateQuestion.choiceC %}");
                     }
 
 

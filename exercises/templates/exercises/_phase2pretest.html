@@ -1,3 +1,4 @@
+{% load i18n %}
         <p id="phase2pretest"></p>
         <div id="myPlayer"></div>
         <script type="text/javascript">
@@ -57,7 +58,7 @@
                     console.log(index["index"]);
                     if (index["index"] ==  1 ){
                       console.log("display gesture");
-                      $("#instructionDisplayBtn").html("{{generateQuestion.targetGesture}}");
+                      $("#instructionDisplayBtn").html("{% trans generateQuestion.targetGesture %}");
                     } 
 
 
@@ -110,19 +111,19 @@
       <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
-          <button type="button" class="btn btn-block btn-primary disabled" id="instructionDisplayBtn" name="instructionDisplayBtn" value=""> ... </button>
+          <button type="button" class="btn btn-block btn-primary disabled" id="instructionDisplayBtn" name="instructionDisplayBtn" value="">{% trans "..." %} </button>
         </div>
         <div class="col-sm-4"></div>
       </div>
       <div class="row">
 
           <div class="col-sm-4">
-              <button type="button" class="btn btn-block btn-primary disabled" id="correctBtn" name="correctBtn" value="correct"> Correct </button>
+              <button type="button" class="btn btn-block btn-primary disabled" id="correctBtn" name="correctBtn" value="correct">{% trans "Correct" %}</button>
           </div>
           <div class="col-sm-4">
           </div>
           <div class="col-sm-4">
-              <button type="button" class="btn btn-block btn-primary disabled" id="incorrectBtn" name="incorrectBtn" value="incorrect"> Incorrect </button>
+              <button type="button" class="btn btn-block btn-primary disabled" id="incorrectBtn" name="incorrectBtn" value="incorrect">{% trans "Incorrect" %}</button>
           </div>
 
       </div>

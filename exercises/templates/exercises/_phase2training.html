@@ -1,3 +1,4 @@
+{% load i18n %}
       <p id="phase2training"></p>
       <div id="myPlayer"></div>
       <script type="text/javascript">
@@ -22,7 +23,7 @@
                   onTime: function(event) {      
                     if(this.getPlaylistIndex() == 0){
                       if(event.position >= 12){
-                        $("#trainingBtn").html("{{generateQuestion.targetGesture}}");
+                        $("#trainingBtn").html("{% trans generateQuestion.targetGesture %}");
                       }
                       
                     };           
@@ -93,6 +94,6 @@
       <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
-          <button type="button" class="btn btn-block btn-primary disabled" id="trainingBtn" name="trainingBtn" value=""> ... </button>
+          <button type="button" class="btn btn-block btn-primary disabled" id="trainingBtn" name="trainingBtn" value="">{% trans "..." %}</button>
         </div>
       </div>
