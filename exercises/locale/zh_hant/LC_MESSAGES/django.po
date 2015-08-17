@@ -88,7 +88,7 @@ msgstr "登出"
 
 #: exercises/templates/exercises/layout.html:90
 msgid "CUHK Educational Psychology Lab"
-msgstr ""香港中文大學教育學院語言及手勢實驗室
+msgstr "香港中文大學教育學院語言及手勢實驗室"
 
 #: exercises/templates/exercises/login.html:45
 msgid "Gestures Trainer Portal Login"
