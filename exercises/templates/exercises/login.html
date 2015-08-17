@@ -114,6 +114,8 @@ body {
 
 
     </div>
+    <p>{% if request.GET %}</p>
+    <p>{% if request.GET.status %}</p>
     {% if request.GET.status == "loginError" %}
     <div class="row">
       <div class="alert alert-warning" role="alert">
