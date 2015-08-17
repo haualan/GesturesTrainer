@@ -113,6 +113,18 @@ SOCIAL_AUTH_INACTIVE_USER_URL = '/dashboard'
 # Inactive users can be redirected to this URL when trying to authenticate.
 
 
+# disable new user creation through fb
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details', 
+    'social.pipeline.social_auth.social_uid',      
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
+ )
+
+
 # social oauth methods
 AUTHENTICATION_BACKENDS = (
     # 'social.backends.open_id.OpenIdAuth',

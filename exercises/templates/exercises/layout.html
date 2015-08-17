@@ -15,7 +15,16 @@
         /*padding-bottom: 0px;*/
       }
 
-
+      .btn_facebook_login {
+    border: 1px solid #3b5a9b;
+    background: #5477ba;
+    background: -moz-linear-gradient(top,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(1%,#90a7d4),color-stop(4%,#5477ba),color-stop(100%,#3b5a9b));
+    background: -webkit-linear-gradient(top,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+    background: -o-linear-gradient(top,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+    background: -ms-linear-gradient(top,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+    background: linear-gradient(to bottom,#90a7d4 1%,#5477ba 4%,#3b5a9b 100%);
+}
       
     </style>
 
@@ -37,20 +46,52 @@
           <a class="navbar-brand" href="{% url 'exercises:dashboard'%}">{% trans "Gestures Trainer" %}</a>
         </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav navbar-left">
             <li><a href="{% url 'exercises:dashboard'%}">{% trans "Dashboard" %}</a></li>
 
 
           </ul>
+        
+
+
+
+
+       <!--  <ul class="nav navbar-nav navbar-right">
+          <li><a href="#about">Right</a></li>
+          <li><a href="#contact">Right</a></li>
+        </ul> -->
 
           {% if user.is_authenticated %}
-          <form class="navbar-form navbar-right" method="get" action="/logout" style="margin: 0px;">
-            <div class="form-group">
-              <a class="navbar-text" style="padding: 0 0;">{% trans "Welcome" %}, {{ user.first_name }} {{ user.last_name }}</a> 
-            </div>
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success">  {% trans "Logout" %}</button>
-          </form>
+          <ul class="nav navbar-nav navbar-right">
+            
+          
+            {% if not backends.associated %}
+            <li>
+              <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
+                <span class="icon" style="width:40px">
+                  <img  src="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yo/r/jVG1f1GslU7.png" alt="{% trans "Login with Facebook" %}" width="15" height="15">
+                </span>
+                <span class="text" style="margin-left:4px; color:white;">
+                  <span class="brief">{% trans "link" %}</span> 
+                </span>
+                 
+               </a>
+            </li>
+            
+            {% endif %}
+
+            <li>
+            <form class="navbar-form navbar-right" method="get" action="/logout" style="margin: 0px;">
+              <div class="form-group">
+                <a class="navbar-text" style="padding: 0 0;">{% trans "Welcome" %}, {{ user.first_name }} {{ user.last_name }}</a> 
+              </div>
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success">  {% trans "Logout" %}</button>
+            </form>
+            </li>
+
+          </ul>
+      
           {% endif %}
           <!-- <form class="navbar-form navbar-right">
             <div class="form-group">
