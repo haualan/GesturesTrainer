@@ -97,8 +97,8 @@ SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/dashboard'
 # Used to redirect the user once the auth process ended successfully. The value of ?next=/foo is used if it was present
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
-SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/?status=loginError'
+SOCIAL_AUTH_BACKEND_ERROR_URL = '/?status=backendError'
 # URL where the user will be redirected in case of an error
 SOCIAL_AUTH_LOGIN_URL = '/dashboard'
 # Is used as a fallback for LOGIN_ERROR_URL
