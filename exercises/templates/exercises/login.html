@@ -114,16 +114,12 @@ body {
 
 
     </div>
-    <p>{{ request.GET }}</p>
-    <p>{{ request.GET.status }}</p>
+
     {% if request.GET.status == "loginError" %}
     <div class="row">
       <div class="alert alert-warning" role="alert">
         {% trans "Account not linked. Please login using your username and password." %}
       </div>
-        
-    </div>
-      
     </div>
     {% endif %}
    
