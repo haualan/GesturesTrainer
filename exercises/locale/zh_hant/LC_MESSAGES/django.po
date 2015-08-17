@@ -22,7 +22,7 @@ msgstr ""
 #: exercises/templates/exercises/_phase2posttest.html:146
 #: exercises/templates/exercises/_phase3posttest.html:151
 msgid "Don't Know"
-msgstr "不知道”
+msgstr "不知道"
 
 #: exercises/templates/exercises/_phase1training.html:92
 #: exercises/templates/exercises/_phase2posttest.html:132
@@ -39,36 +39,36 @@ msgstr "..."
 #: exercises/templates/exercises/_phase3posttest.html:145
 #: exercises/templates/exercises/_phase3pretest.html:122
 msgid "Correct"
-msgstr "正確”
+msgstr "正確"
 
 #: exercises/templates/exercises/_phase2posttest.html:143
 #: exercises/templates/exercises/_phase2pretest.html:126
 #: exercises/templates/exercises/_phase3posttest.html:148
 #: exercises/templates/exercises/_phase3pretest.html:127
 msgid "Incorrect"
-msgstr "不正確”
+msgstr "不正確"
 
 #: exercises/templates/exercises/dashboard.html:64
 msgid "Sorry, no exercises are available to you."
-msgstr "對不起, 這個項目還沒有開始”
+msgstr "對不起, 這個項目還沒有開始"
 
 #: exercises/templates/exercises/exercise.html:107
 #: exercises/templates/exercises/exercise.html:118
 msgid "I understand"
-msgstr "明白”
+msgstr "明白"
 
 #: exercises/templates/exercises/exercise.html:110
 #: exercises/templates/exercises/exercise.html:121
 msgid "I don't understand"
-msgstr "不明白”
+msgstr "不明白"
 
 #: exercises/templates/exercises/exercise.html:200
 msgid "Next"
-msgstr "下一個”
+msgstr "下一個"
 
 #: exercises/templates/exercises/exercise.html:224
 msgid "Section is complete"
-msgstr "完成”
+msgstr "完成"
 
 #: exercises/templates/exercises/layout.html:37
 msgid "Gestures Trainer"
@@ -76,15 +76,15 @@ msgstr "妙手可言"
 
 #: exercises/templates/exercises/layout.html:41
 msgid "Dashboard"
-msgstr "目錄”
+msgstr "目錄"
 
 #: exercises/templates/exercises/layout.html:49
 msgid "Welcome"
-msgstr "歡迎”
+msgstr "歡迎"
 
 #: exercises/templates/exercises/layout.html:52
 msgid "Logout"
-msgstr "登出”
+msgstr "登出"
 
 #: exercises/templates/exercises/layout.html:90
 msgid "CUHK Educational Psychology Lab"
@@ -96,19 +96,19 @@ msgstr "妙手可言"
 
 #: exercises/templates/exercises/login.html:60
 msgid "Your username and password didn't match. Please try again."
-msgstr "您的用户名稱或密碼不正確. 請重新登入.”
+msgstr "您的用户名稱或密碼不正確. 請重新登入."
 
 #: exercises/templates/exercises/login.html:76
 msgid "User"
-msgstr "用户名稱”
+msgstr "用户名稱"
 
 #: exercises/templates/exercises/login.html:78
 msgid "Password"
-msgstr "密碼”
+msgstr "密碼"
 
 #: exercises/templates/exercises/login.html:84
 msgid "login"
-msgstr "登入”
+msgstr "登入"
 
 #: exercises/templates/exercises/login.html:97
 msgid "Login with Facebook"
