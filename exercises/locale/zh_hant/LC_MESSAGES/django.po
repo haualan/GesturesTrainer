@@ -22,7 +22,7 @@ msgstr ""
 #: exercises/templates/exercises/_phase2posttest.html:146
 #: exercises/templates/exercises/_phase3posttest.html:151
 msgid "Don't Know"
-msgstr ""
+msgstr "不知道”
 
 #: exercises/templates/exercises/_phase1training.html:92
 #: exercises/templates/exercises/_phase2posttest.html:132
@@ -32,43 +32,43 @@ msgstr ""
 #: exercises/templates/exercises/_phase3pretest.html:115
 #: exercises/templates/exercises/_phase3training.html:102
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: exercises/templates/exercises/_phase2posttest.html:140
 #: exercises/templates/exercises/_phase2pretest.html:121
 #: exercises/templates/exercises/_phase3posttest.html:145
 #: exercises/templates/exercises/_phase3pretest.html:122
 msgid "Correct"
-msgstr ""
+msgstr "正確”
 
 #: exercises/templates/exercises/_phase2posttest.html:143
 #: exercises/templates/exercises/_phase2pretest.html:126
 #: exercises/templates/exercises/_phase3posttest.html:148
 #: exercises/templates/exercises/_phase3pretest.html:127
 msgid "Incorrect"
-msgstr ""
+msgstr "不正確”
 
 #: exercises/templates/exercises/dashboard.html:64
 msgid "Sorry, no exercises are available to you."
-msgstr ""
+msgstr "對不起, 這個項目還沒有開始”
 
 #: exercises/templates/exercises/exercise.html:107
 #: exercises/templates/exercises/exercise.html:118
 msgid "I understand"
-msgstr ""
+msgstr "明白”
 
 #: exercises/templates/exercises/exercise.html:110
 #: exercises/templates/exercises/exercise.html:121
 msgid "I don't understand"
-msgstr ""
+msgstr "不明白”
 
 #: exercises/templates/exercises/exercise.html:200
 msgid "Next"
-msgstr ""
+msgstr "下一個”
 
 #: exercises/templates/exercises/exercise.html:224
 msgid "Section is complete"
-msgstr ""
+msgstr "完成”
 
 #: exercises/templates/exercises/layout.html:37
 msgid "Gestures Trainer"
@@ -76,43 +76,43 @@ msgstr "妙手可言"
 
 #: exercises/templates/exercises/layout.html:41
 msgid "Dashboard"
-msgstr ""
+msgstr "目錄”
 
 #: exercises/templates/exercises/layout.html:49
 msgid "Welcome"
-msgstr ""
+msgstr "歡迎”
 
 #: exercises/templates/exercises/layout.html:52
 msgid "Logout"
-msgstr ""
+msgstr "登出”
 
 #: exercises/templates/exercises/layout.html:90
 msgid "CUHK Educational Psychology Lab"
-msgstr ""
+msgstr ""香港中文大學教育學院語言及手勢實驗室
 
 #: exercises/templates/exercises/login.html:45
 msgid "Gestures Trainer Portal Login"
-msgstr "妙手可言portal"
+msgstr "妙手可言"
 
 #: exercises/templates/exercises/login.html:60
 msgid "Your username and password didn't match. Please try again."
-msgstr ""
+msgstr "您的用户名稱或密碼不正確. 請重新登入.”
 
 #: exercises/templates/exercises/login.html:76
 msgid "User"
-msgstr ""
+msgstr "用户名稱”
 
 #: exercises/templates/exercises/login.html:78
 msgid "Password"
-msgstr ""
+msgstr "密碼”
 
 #: exercises/templates/exercises/login.html:84
 msgid "login"
-msgstr ""
+msgstr "登入”
 
 #: exercises/templates/exercises/login.html:97
 msgid "Login with Facebook"
-msgstr "使用 Facebook"
+msgstr "使用 Facebook 登入"
 
 msgid "phase1"
 msgstr "階段一"
@@ -207,7 +207,8 @@ msgstr "邊度"
 msgid "wrong"
 msgstr "錯嘅"
 
-
+msgid "Account not linked. Please login using your username and password."
+msgstr "户口連接不成功. 請用你的用户名稱與密碼."
 
 
 
