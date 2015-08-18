@@ -1,6 +1,7 @@
 import sys
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -51,7 +52,8 @@ users = [
 for username, password, email in users:
     try:
         print 'Creating user {0}.'.format(username)
-        user = User.objects.create_user(username=username, email=email)
+        user = User.objects.create_user(username=username, email=email, last_login=timezone.now())
+
         user.set_password(password)
         user.save()
 
