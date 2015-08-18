@@ -304,6 +304,8 @@ class Exercise(object):
 
                 else:
                     result['is_enabled'] = False
+                    if user_progress[i][j] < 20:
+                        previous_section_complete = False
 
                 results.append(result)
 
