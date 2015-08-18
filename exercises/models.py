@@ -46,6 +46,7 @@ response_choices = (
     ('dontKnow', 'User doesnt know response'),
     ('correct', 'correct response'),
     ('incorrect', 'incorrect response'),
+    ('dummyData', 'dummyData'),
   )
 
 class Phase(models.Model):
@@ -142,6 +143,21 @@ p3_training_prefix = 'https://s3-ap-southeast-1.amazonaws.com/gesturetrainingmed
 
 
 p1_assessment_prefix = 'rtmp://s1walhiktvwlah.cloudfront.net/cfx/st/mp4:'
+p1_feedback_prefix = p1_assessment_prefix
+p1_training_prefix = p1_assessment_prefix
+
+p2_assessment_prefix = p1_assessment_prefix
+p2_feedback_prefix = p1_assessment_prefix
+p2_training_prefix = p1_assessment_prefix
+
+p3_assessment_prefix = p1_assessment_prefix
+p3_feedback_prefix = p1_assessment_prefix
+p3_training_prefix = p1_assessment_prefix
+
+
+
+# cloudinary, for each filename no spaces allowed
+p1_assessment_prefix = 'http://res.cloudinary.com/qwertyuiop/video/upload/'
 p1_feedback_prefix = p1_assessment_prefix
 p1_training_prefix = p1_assessment_prefix
 
@@ -592,6 +608,9 @@ VIDEOS = {
   
 }
 
+for i in VIDEOS:
+  VIDEOS[i] = VIDEOS[i].replace(' ', '_')
+  
 QUESTIONS = {
   'angry' : {'choices': ['hungry', 'angry', 'come']}, 
   'awesome': {'choices': ['goodbye','hug','awesome']}, 
