@@ -32,7 +32,7 @@ if __name__ == '__main__':
       ('user121', 'phase1', 'training1'),
       ('user121', 'phase1', 'training2'),
       ('user121', 'phase1', 'training3'),
-
+      
       ('user122', 'phase1', 'pretest'),
       ('user122', 'phase1', 'training1'),
       ('user122', 'phase1', 'training2'),
