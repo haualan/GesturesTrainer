@@ -78,7 +78,7 @@ class ExerciseResult(models.Model):
   # section = models.ForeignKey('Section', related_name='ExerciseResults')
   # # cycle describes how many times the section has been performed on user
   # cycle = models.IntegerField(default = 1)
-  gestureTested = models.CharField(max_length = 100, blank= True)
+  gestureTested = models.CharField(max_length = 100, blank= True, choices = response_choices)
   response = models.CharField(max_length = 100, choices = response_choices )
 
   class Meta:
