@@ -8,6 +8,7 @@ from django.views import generic
 from django.shortcuts import render
 from django.db.models import Avg, Max, Min, Count
 from django.http import HttpResponse
+from django.core.urlresolvers import reverse_lazy
 
 from exercises.permissions import IsOwnerOrReadOnly
 from rest_framework.decorators import api_view, detail_route
@@ -35,7 +36,7 @@ def logged_in_and_in_group(user):
 
 class GroupRequiredMixin(object): 
   # path to be redirected when user is not logged in yet
-  login_url = '/'
+  login_url = reverse_lazy('exercises:login')
   
   @method_decorator(user_passes_test(logged_in_and_in_group, login_url=login_url))
   def dispatch(self, *args, **kwargs):

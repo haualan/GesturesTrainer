@@ -4,7 +4,11 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="http://content.jwplatform.com/libraries/IUkQRbu5.js"></script>
+<!-- <script src="http://content.jwplatform.com/libraries/IUkQRbu5.js"></script> -->
+<script src="static/js/jwplayer/jwplayer.js"></script>
+<script src="static/js/detectMobile.js"></script>
+<script>jwplayer.key="u2ChYQ/2ke1y0A+Wyw3UWeTCaZmZx1LLHZnJ5w==";</script>
+
 <script type="text/javascript">
           function checkProgress(postdata) {
                           $.getJSON('{% url 'exercises:userResponse' %}', postdata)
@@ -71,7 +75,7 @@
   <script type="text/javascript">
     var thePlayer = jwplayer("myPlayer").setup({
           playlist: [
-                       {
+                        {
                           file:"{{generateInstruction.greetingVideo}}", 
                           image:"{{robothead_small_image}}",
                         },
@@ -84,17 +88,27 @@
         aspectratio: "595:576",
         stretching: "exactfit",
         autostart: true,
-        events:{ 
-            onTime: function(event) { 
-          
-            },
-            onPlaylistComplete:function(){
-              $('#understandBtn, #dontUnderstandBtn').removeClass('disabled');
-            }
-          }
+        // events:{ 
+
+        //     onPlaylistComplete:function(){
+        //       $('#understandBtn, #dontUnderstandBtn').removeClass('disabled');
+        //     }
+
+        //   }
         }); 
       //stop player manual controls
-        thePlayer.setControls(false);
+        if (isMobile == false) {
+          thePlayer.setControls(false);
+        }
+
+        thePlayer.on('beforePlay', function(event){
+          thePlayer.setControls(false);
+        });
+        
+        thePlayer.on('PlaylistComplete', function(event){
+          $('#understandBtn, #dontUnderstandBtn').removeClass('disabled');
+        });
+  
   </script>
 
 

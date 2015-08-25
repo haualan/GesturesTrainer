@@ -73,7 +73,14 @@
                 }
               }); 
             //stop player manual controls
-              thePlayer.setControls(false);
+            if (isMobile == false) {
+                thePlayer.setControls(false);
+              }
+
+              thePlayer.on('beforePlay', function(event){
+                thePlayer.setControls(false);
+              });
+              
 
         $(document).ready(function () {
 
