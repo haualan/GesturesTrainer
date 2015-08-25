@@ -104,7 +104,7 @@
         thePlayer.on('beforePlay', function(event){
           thePlayer.setControls(false);
         });
-        
+
         thePlayer.on('PlaylistComplete', function(event){
           $('#understandBtn, #dontUnderstandBtn').removeClass('disabled');
         });
@@ -117,10 +117,10 @@
 {% if debug %}
 
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-6 btn-vert-block">
     <button type="submit" class="btn btn-primary btn-block" id="understandBtn" name="understandBtn" value="1">{% trans "I understand" %} </button>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-6 btn-vert-block">
     <button type="submit" class="btn btn-primary btn-block" id="dontUnderstandBtn" name="dontUnderstandBtn" value="1">{% trans "I don't understand" %}</button>
   </div>
 </div>
@@ -128,10 +128,10 @@
 {% else %}
 
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-6 btn-vert-block">
     <button type="submit" class="btn btn-primary btn-block disabled" id="understandBtn" name="understandBtn" value="1">{% trans "I understand" %}</button>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-6 btn-vert-block">
     <button type="submit" class="btn btn-primary btn-block disabled" id="dontUnderstandBtn" name="dontUnderstandBtn" value="1">{% trans "I don't understand" %}</button>
   </div>
 </div>
