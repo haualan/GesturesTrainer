@@ -162,7 +162,7 @@ msgstr "食嘢"
 msgid "bird"
 msgstr "雀仔"
 
-msgid "good"
+msgid "goodbye"
 msgstr "拜拜"
 
 msgid "hello"

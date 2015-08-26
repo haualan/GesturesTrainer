@@ -122,11 +122,9 @@
                                     ]);
                   }
 
-                  thePlayer.onPlaylistComplete(
-                      function(){
-                        // checkProgress(postdata);
-                      }
-                    );
+                  if (isMobile == true) {
+                    thePlayer.setControls(true);
+                  }
 
               });
             

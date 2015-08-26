@@ -103,6 +103,10 @@
                                 image:"{{robothead_small_image}}",
                               }
                             ]);
+                  
+                  if (isMobile == true) {
+                    thePlayer.setControls(true);
+                  }
                 }
               );
             $("#correctBtn, #incorrectBtn").addClass('disabled');
