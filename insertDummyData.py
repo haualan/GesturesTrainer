@@ -7,7 +7,7 @@ from exercises.models import *
 
 User = get_user_model()
 
-def insertSingleDummy(username, phase, section, gestureTested ):
+def insertSingleDummy(username, phase, section, gestureTested, *args ):
   try:
     print 'inserting dummyData:', username, phase, section, gestureTested
     user = User.objects.get(username = username)
@@ -28,12 +28,17 @@ def insertSectionDummy(username, phase, section, *args):
 
 if __name__ == '__main__':
   payload = (
-      ('user121', 'phase1', 'pretest'),
+     ('user121', 'phase1', 'pretest'),
 ('user121', 'phase1', 'training1'),
 ('user121', 'phase1', 'training2'),
 ('user121', 'phase1', 'training3'),
 ('user121', 'phase1', 'training4'),
 ('user121', 'phase1', 'posttest1'),
+
+('user122', 'phase1', 'pretest'),
+('user122', 'phase1', 'training1'),
+('user122', 'phase1', 'training2'),
+('user122', 'phase1', 'training3'),
 
 ('user125', 'phase1', 'pretest'),
 ('user125', 'phase1', 'training1'),
@@ -43,6 +48,13 @@ if __name__ == '__main__':
 ('user125', 'phase1', 'posttest1'),
 ('user125', 'phase1', 'posttest2'),
 
+('user126', 'phase1', 'pretest'),
+('user126', 'phase1', 'training1'),
+('user126', 'phase1', 'training2'),
+('user126', 'phase1', 'training3'),
+('user126', 'phase1', 'training4'),
+('user126', 'phase1', 'posttest1'),
+
 ('user128', 'phase1', 'pretest'),
 ('user128', 'phase1', 'training1'),
 ('user128', 'phase1', 'training2'),
@@ -50,6 +62,13 @@ if __name__ == '__main__':
 ('user128', 'phase1', 'training4'),
 ('user128', 'phase1', 'posttest1'),
 ('user128', 'phase1', 'posttest2'),
+
+('user130', 'phase1', 'pretest'),
+('user130', 'phase1', 'training1'),
+('user130', 'phase1', 'training2'),
+('user130', 'phase1', 'training3'),
+('user130', 'phase1', 'training4'),
+('user130', 'phase1', 'posttest1'),
 
 ('user131', 'phase1', 'pretest'),
 ('user131', 'phase1', 'training1'),
@@ -83,6 +102,13 @@ if __name__ == '__main__':
 ('user136', 'phase1', 'posttest1'),
 ('user136', 'phase1', 'posttest2'),
 
+('user137', 'phase1', 'pretest'),
+('user137', 'phase1', 'training1'),
+('user137', 'phase1', 'training2'),
+('user137', 'phase1', 'training3'),
+('user137', 'phase1', 'training4'),
+('user137', 'phase1', 'posttest1'),
+
 ('user138', 'phase1', 'pretest'),
 ('user138', 'phase1', 'training1'),
 ('user138', 'phase1', 'training2'),
@@ -98,6 +124,8 @@ if __name__ == '__main__':
 ('user139', 'phase1', 'posttest1'),
 ('user139', 'phase1', 'posttest2'),
 
+('user140', 'phase1', 'pretest'),
+
 ('user141', 'phase1', 'pretest'),
 ('user141', 'phase1', 'training1'),
 ('user141', 'phase1', 'training2'),
@@ -106,12 +134,26 @@ if __name__ == '__main__':
 ('user141', 'phase1', 'posttest1'),
 ('user141', 'phase1', 'posttest2'),
 
+('user142', 'phase1', 'pretest', 'drive'),
+('user142', 'phase1', 'pretest', 'bird'),
+('user142', 'phase1', 'pretest', 'goodbye'),
+('user142', 'phase1', 'pretest', 'hello'),
+('user142', 'phase1', 'pretest', 'hungry'),
+('user142', 'phase1', 'pretest', 'yes'),
+('user142', 'phase1', 'pretest', 'baby'),
+('user142', 'phase1', 'pretest', 'wait'),
+('user142', 'phase1', 'pretest', 'walk'),
+('user142', 'phase1', 'pretest', 'welcome'),
+('user142', 'phase1', 'pretest', 'where'),
+('user142', 'phase1', 'pretest', 'wrong'),
+
 ('user143', 'phase1', 'pretest'),
 ('user143', 'phase1', 'training1'),
 ('user143', 'phase1', 'training2'),
 ('user143', 'phase1', 'training3'),
 ('user143', 'phase1', 'training4'),
 ('user143', 'phase1', 'posttest1'),
+('user143', 'phase1', 'posttest2'),
 
 ('user144', 'phase1', 'pretest'),
 ('user144', 'phase1', 'training1'),
@@ -136,6 +178,10 @@ if __name__ == '__main__':
 ('user208', 'phase1', 'training4'),
 ('user208', 'phase1', 'posttest1'),
 ('user208', 'phase1', 'posttest2'),
+
+('user209', 'phase1', 'pretest'),
+('user209', 'phase1', 'training1'),
+('user209', 'phase1', 'training2'),
 
 ('user210', 'phase1', 'pretest'),
 ('user210', 'phase1', 'training1'),
@@ -169,6 +215,11 @@ if __name__ == '__main__':
 ('user215', 'phase1', 'posttest1'),
 ('user215', 'phase1', 'posttest2'),
 
+('user216', 'phase1', 'pretest')
+('user216', 'phase1', 'training1'),
+('user216', 'phase1', 'training2'),
+('user216', 'phase1', 'training3'),
+
 ('user218', 'phase1', 'pretest'),
 ('user218', 'phase1', 'training1'),
 ('user218', 'phase1', 'training2'),
@@ -199,7 +250,36 @@ if __name__ == '__main__':
 ('user221', 'phase1', 'posttest1'),
 ('user221', 'phase1', 'posttest2'),
 
+('user230', 'phase1', 'pretest', 'angry'),
+('user230', 'phase1', 'pretest', 'drive'),
+('user230', 'phase1', 'pretest', 'eat'),
+('user230', 'phase1', 'pretest', 'bird'),
+('user230', 'phase1', 'pretest', 'goodbye'),
+('user230', 'phase1', 'pretest', 'hello'),
+('user230', 'phase1', 'pretest', 'hug'),
+('user230', 'phase1', 'pretest', 'mine'),
+('user230', 'phase1', 'pretest', 'notAllowed'),
+('user230', 'phase1', 'pretest', 'annoyed'),
+('user230', 'phase1', 'pretest', 'baby'),
+('user230', 'phase1', 'pretest', 'come'),
+('user230', 'phase1', 'pretest', 'wait'),
+('user230', 'phase1', 'pretest', 'walk'),
+('user230', 'phase1', 'pretest', 'welcome'),
+('user230', 'phase1', 'pretest', 'where'),
+('user230', 'phase1', 'pretest', 'wrong'),
+('user230', 'phase1', 'training1'),
+('user230', 'phase1', 'training2'),
+('user230', 'phase1', 'training3', 'come'),
+('user230', 'phase1', 'training3', 'where'),
+
+
     )
 
   for i in payload:
-    insertSectionDummy(*i)
+    if len(i) == 3:
+      insertSectionDummy(*i)
+    elif len(i) == 4:
+      insertSingleDummy(*i)
+    else:
+      print 'incorrect length:', i
+
