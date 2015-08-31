@@ -215,7 +215,7 @@ if __name__ == '__main__':
 ('user215', 'phase1', 'posttest1'),
 ('user215', 'phase1', 'posttest2'),
 
-('user216', 'phase1', 'pretest')
+('user216', 'phase1', 'pretest'),
 ('user216', 'phase1', 'training1'),
 ('user216', 'phase1', 'training2'),
 ('user216', 'phase1', 'training3'),
