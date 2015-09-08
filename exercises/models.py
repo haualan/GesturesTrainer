@@ -352,7 +352,7 @@ VIDEOS = {
   'p2_assessment_wrongGesture':  '{}Phase II assessment_gesture instruction 2_wrong4.mp4'.format(p2_assessment_prefix),
 
   # Thank you video for any repsonse chosen during pretest, this is a short thankyou Response
-  'p2_feedback_thankyou':   '{}Phase II assessment_gesture feedback_thank you (pretest)v2.mp4'.format(p2_feedback_prefix),
+  'p2_feedback_thankyou':   '{}Phase II assessment_gesture feedback_thank you pretest v2.mp4'.format(p2_feedback_prefix),
 
   # greeting and instructions for the training section
   'p2_training_greetingAndInstruction': '{}Phase II training_greeting and instruction.mp4'.format(p2_training_prefix),
@@ -437,7 +437,7 @@ VIDEOS = {
   'p3_assessment_greetingAndInstruction': '{}Phase III assessment_greeting and instruction.mp4'.format(p3_assessment_prefix),
 
   # video that asks if user understands the instructions
-  'p3_assessment_doYouUnderstand': '{}do you understand (new nao).mp4'.format(p3_assessment_prefix),
+  'p3_assessment_doYouUnderstand': '{}do you understand new nao.mp4'.format(p3_assessment_prefix),
 
   # video demontrating the gestures and asking what does user think it means:
   'p3_assessment_pretest_angryGesture' :  '{}Phase III assessment_pretest_angry.mp4'.format(p3_assessment_prefix),
@@ -527,13 +527,13 @@ VIDEOS = {
 
 
   # Thank you video for any repsonse chosen during pretest, this is a short thankyou Response
-  'p3_feedback_thankyou':   '{}Phase III training _ assessment_gesture feedback_thank you (pretest)v2.mp4'.format(p3_feedback_prefix),
+  'p3_feedback_thankyou':   '{}Phase III training _ assessment_gesture feedback_thank you pretest v2.mp4'.format(p3_feedback_prefix),
 
   # greeting and instructions for the training section
   'p3_training_greetingAndInstruction': '{}Phase III training_greeting and instruction.mp4'.format(p3_training_prefix),
 
   # video that asks if user understands the instructions, specifcally for the training section
-  'p3_training_doYouUnderstand': '{}do you understand (new nao).mp4'.format(p3_training_prefix),
+  'p3_training_doYouUnderstand': '{}do you understand new nao.mp4'.format(p3_training_prefix),
 
   # these training videos demonstrate the gestures to the user, no response is expected from the user on the training sections
   'p3_training_angryTraining_1':     '{}Phase III training_gesture_angry_1st.mp4'.format(p3_training_prefix),
