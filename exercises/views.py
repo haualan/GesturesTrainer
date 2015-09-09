@@ -229,12 +229,31 @@ class Exercise(object):
 
 
         # check if training2 is complete then update training3 to 1 week after the latest record's completion date
+        # for i in phase_ordered_list:
+        #     if user_progress[i]['training2'] >= 20:
+        #         postponeTime = timedelta(weeks = 1) + ExerciseResult.objects.filter(phase = i, section = 'training2').values_list('created').order_by('-created')[0][0]
+        #         if postponeTime > phaseSection_start_dates[i]['training3']:
+        #             # if the postponed time is later than the assigned time, then it needs to be updated to one week ahead
+        #             phaseSection_start_dates[i]['training3'] = postponeTime
+
+        postponeDays = 0
+        latest_completed_date = None
         for i in phase_ordered_list:
-            if user_progress[i]['training2'] >= 20:
-                postponeTime = timedelta(weeks = 1) + ExerciseResult.objects.filter(phase = i, section = 'training2').values_list('created').order_by('-created')[0][0]
-                if postponeTime > phaseSection_start_dates[i]['training3']:
-                    # if the postponed time is later than the assigned time, then it needs to be updated to one week ahead
-                    phaseSection_start_dates[i]['training3'] = postponeTime
+            for j in section_ordered_list:
+                if latest_completed_date and postponeDays != 0 :
+                    # update postponed times if the section has begun
+                    postponeTime = timedelta(days = postponeDays) + latest_completed_date['created']
+                    
+                    if postponeTime > phaseSection_start_dates[i][j]:
+                        # if the postponed time is later than the assigned time, then it needs to be updated
+                        # print 'postponeTime',i,j, postponeTime
+                        phaseSection_start_dates[i][j] = postponeTime
+                # reset postponeDays counter
+                postponeDays = 0
+                if user_progress[i][j] >= 20:
+                    postponeDays = PhaseSection.objects.get(phase = i, section = j).days_apart
+                    latest_completed_date = ExerciseResult.objects.filter(phase = i, section = j, owner = self.user).values('created').order_by('-created').first()
+                   
 
         # generate a list of dicts and determine whether section should be enabled
         today_date = timezone.now()

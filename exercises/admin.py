@@ -45,6 +45,11 @@ def autoregister(*app_list):
             resource_class = ExerciseResultResource
             list_filter = ('owner','phase', 'section', 'gestureTested')
           list_display = list(map(lambda x: x.name ,model._meta.fields))[1:]
+
+          if model.__name__ == 'PhaseSection':
+            list_filter = ('phase', 'section')
+            list_editable = ('start_date','days_apart') # this MUST only contain fields that also are in "list_display"
+
         admin.site.register(model, ModAdmin)
       except AlreadyRegistered:
         pass

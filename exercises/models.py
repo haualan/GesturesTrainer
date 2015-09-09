@@ -67,6 +67,7 @@ class PhaseSection(models.Model):
   phase = models.CharField(max_length = 100)
   section = models.CharField(max_length = 100)
   start_date = models.DateTimeField(blank=True)
+  days_apart = models.IntegerField(default = 7)
 
 
 class ExerciseResult(models.Model):

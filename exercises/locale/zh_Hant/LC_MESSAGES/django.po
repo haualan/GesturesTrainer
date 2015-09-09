@@ -142,10 +142,10 @@ msgid "posttest1"
 msgstr "第一次訓練後評估"
 
 msgid "posttest2"
-msgstr "第二次訓練前評估"
+msgstr "第二次訓練後評估"
 
 msgid "posttest3"
-msgstr "第三次訓練前評估"
+msgstr "第三次訓練後評估"
 
 msgid "angry"
 msgstr "好嬲"
