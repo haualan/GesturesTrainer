@@ -158,7 +158,7 @@ p3_training_prefix = p1_assessment_prefix
 
 
 # cloudinary, for each filename no spaces allowed
-p1_assessment_prefix = 'http://res.cloudinary.com/qwertyuiop/video/upload/'
+p1_assessment_prefix = 'http://res.cloudinary.com/qwertyuiop/video/upload/vc_auto/'
 p1_feedback_prefix = p1_assessment_prefix
 p1_training_prefix = p1_assessment_prefix
 
